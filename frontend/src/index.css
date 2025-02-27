@@ -1,0 +1,95 @@
+/* index.css */
+
+/* Importar la fuente Roboto desde Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
+/* Variables de color para una paleta fría, minimalista y moderna */
+:root {
+  --primary-dark: #2d3748;      /* Fondo oscuro */
+  --primary-darker: #1f2937;    /* Tonos más profundos */
+  --primary-light: #f7fafc;     /* Fondo claro */
+  --accent-blue: #63b3ed;       /* Acento para enlaces y botones */
+  --text-light: #ffffff;
+  --text-dark: #1a202c;
+  --hover-dark: #4a5568;        /* Hover para elementos interactivos */
+  
+  font-family: 'Roboto', sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+}
+
+/* Reset básico */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Estilos globales para el body */
+body {
+  font-family: 'Roboto', sans-serif;
+  background-color: var(--primary-light);
+  color: var(--text-dark);
+  min-width: 320px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Estilos para enlaces */
+a {
+  font-weight: 500;
+  color: var(--accent-blue);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--hover-dark);
+}
+
+/* Estilos para encabezados */
+h1 {
+  text-align: center;
+  font-size: 3.2em;
+  line-height: 1.1;
+  margin: 1rem 0;
+}
+
+/* Estilos para botones */
+button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: var(--primary-darker);
+  color: var(--text-light);
+  cursor: pointer;
+  transition: background-color 0.25s, border-color 0.25s;
+}
+
+button:hover {
+  background-color: var(--primary-dark);
+  border-color: var(--accent-blue);
+}
+
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+/* Ajustes para modo claro según preferencia del usuario */
+@media (prefers-color-scheme: light) {
+  :root {
+    --text-dark: #213547;
+    --primary-light: #ffffff;
+  }
+  a:hover {
+    color: #747bff;
+  }
+  button {
+    background-color: #f9f9f9;
+    color: var(--text-dark);
+  }
+}

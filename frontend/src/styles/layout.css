@@ -1,0 +1,113 @@
+/* layout.css */
+
+/* Importar la fuente Roboto desde Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
+/* Variables de color para mantener una paleta coherente */
+:root {
+  --primary-dark: #2d3748;      /* Equivalente a bg-gray-800 */
+  --primary-darker: #1f2937;    /* Tonos más oscuros para contraste */
+  --primary-light: #f7fafc;     /* Equivalente a bg-gray-100 */
+  --accent-blue: #63b3ed;       /* Para acentos y destacados */
+  --text-light: #ffffff;
+  --text-dark: #1a202c;
+  --hover-dark: #4a5568;        /* Equivalente a hover:bg-gray-700 */
+}
+
+/* Reset básico */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Estilo global del body */
+body {
+  font-family: 'Roboto', sans-serif;
+  background-color: var(--primary-light);
+  color: var(--text-dark);
+}
+
+/* Contenedor principal */
+.flex {
+  display: flex;
+}
+
+.h-screen {
+  height: 100vh;
+}
+
+/* Estilos para la barra lateral (nav) */
+nav {
+  width: 16rem; /* w-64 */
+  background-color: var(--primary-dark);
+  color: var(--text-light);
+  padding: 1rem; /* p-4 */
+}
+
+nav h1 {
+  font-size: 2.3rem; /* text-xl */
+  font-weight: bold;
+}
+
+nav ul {
+  margin-top: 2.5rem;
+  list-style: none;
+}
+
+nav ul li {
+  margin-top: 0.5rem;
+}
+
+nav ul li a {
+  display: block;
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+  text-decoration: none;
+  color: var(--text-light);
+  /* Agregamos una transición que incluya el borde lateral y el fondo */
+  transition: border-left 0.3s ease, background-color 0.3s ease, transform 0.3s ease;
+}
+
+/* Destacado lateral y fondo más oscuro en hover */
+nav ul li a:hover {
+  border-left: 3px solid var(--accent-blue);
+  color: var(--text-light);
+  background-color: var(--primary-darker);
+  transform: scale(1.1);
+}
+
+/* Estilos para el contenido principal */
+main {
+  flex: 1;
+  padding: 1.5rem; /* p-6 */
+  background-color: var(--primary-light);
+}
+
+/* Clases opcionales para una estructura alternativa */
+.layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+.sidebar {
+  width: 16rem;
+  background-color: var(--primary-dark);
+  color: var(--text-light);
+  padding: 1rem;
+}
+
+.content {
+  flex: 1;
+  padding: 1.5rem;
+  background-color: var(--primary-light);
+}
+
+/* Utilidades de espaciado */
+.mt-4 {
+  margin-top: 1rem;
+}
+
+.space-y-2 > :not(:last-child) {
+  margin-bottom: 0.5rem;
+}

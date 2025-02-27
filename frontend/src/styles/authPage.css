@@ -1,0 +1,57 @@
+/* AuthPage.css */
+
+/* Contenedor principal de la página de autenticación */
+.session-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: var(--primary-dark); /* Utiliza la variable global */
+  padding: 1rem;
+}
+
+.session-container form {
+  display: flex;
+  padding: 1rem;
+  row-gap: 1rem;
+  flex-direction: column;
+}
+
+.session-container input {
+  display: flex;
+  height: 4vh;
+  width: 30vh;
+  border-radius: 7px;
+  cursor: pointer;
+}
+
+/* Encabezado de la sección (para Iniciar Sesión o Registro) */
+.session-header {
+  text-align: center;
+  font-size: 2.5rem; /* Aproximadamente text-3xl */
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+  color: var(--text-light);
+}
+
+/* Área para alternar entre login y registro */
+.session-toggle {
+  margin-top: 1.5rem;
+  font-size: 0.9rem;
+  color: var(--text-light);
+}
+
+/* Botón para alternar entre modos */
+.toggle-button {
+  background: none;
+  border: none;
+  color: var(--accent-blue);
+  cursor: pointer;
+  text-decoration: underline;
+  font-size: inherit;
+}
+
+.toggle-button:hover {
+  color: var(--hover-dark);
+}
