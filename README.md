@@ -1,5 +1,5 @@
-##**GESTOCK IMS v0.1.0** 
-##Development Release (In Progress)  
+##GESTOCK IMS v0.1.0
+**Development Release (In Progress)**
 
 
 ## Overview
