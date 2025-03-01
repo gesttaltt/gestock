@@ -1,4 +1,4 @@
-##GESTOCK IMS v0.1.0
+## GESTOCK IMS v0.1.0
 **Development Release (In Progress)**
 
 
