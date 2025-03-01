@@ -1,6 +1,6 @@
 ╔════════════════════════════════════════════════════════════════════╗
-║                           **GE STOCK v0.1.0**                        ║
-║   Stock Management & Monitoring – Development Release (In Progress)  ║
+                           **GE STOCK v0.1.0**                        
+   Stock Management & Monitoring – Development Release (In Progress)  
 ╚════════════════════════════════════════════════════════════════════╝
 
 ## Overview
