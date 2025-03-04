@@ -1,4 +1,4 @@
-// /contexts/AuthContext.tsx
+// /contexts/AuthContext.tsx --Authentication context module component
 import React, {
   createContext,
   useContext,

@@ -1,3 +1,5 @@
+// backend/src/routes/productRoutes.js
+
 import express from "express";
 import { getProducts, createProduct, updateProduct, deleteProduct } from "../controllers/productController.js";
 import authMiddleware from "../middleware/authMiddleware.js";

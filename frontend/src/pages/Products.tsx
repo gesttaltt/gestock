@@ -158,9 +158,10 @@ const Products = () => {
             onChange={(e) =>
               setNewProduct({ ...newProduct, category: e.target.value })
             }
-            className="p-2 bg-gray-800 text-white rounded"
+            className="p-2 m-2 bg-gray-800 text-white rounded"
           >
-            <option value="">Seleccione una categoría</option>
+            <option value=""
+            className="p-2 m-2 gap-4">Seleccione una categoría</option>
             {categories.map((cat) => (
               <option key={cat._id} value={cat._id}>
                 {cat.name}

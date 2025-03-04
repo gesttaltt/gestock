@@ -1,12 +1,41 @@
-const Input = ({ type = "text", placeholder, value, onChange, className = "" }) => {
+import React from "react";
+
+interface InputProps {
+  type?: string;
+  placeholder?: string;
+  value: string;
+  onChange: React.ChangeEventHandler<HTMLInputElement>;
+  name: string;
+  className?: string;
+  label?: string;
+}
+
+const Input: React.FC<InputProps> = ({
+  type = "text",
+  placeholder,
+  value,
+  onChange,
+  name,
+  className = "",
+  label,
+}) => {
   return (
-    <input
-      type={type}
-      placeholder={placeholder}
-      value={value}
-      onChange={onChange}
-      className={`mb-4 mx-4 mt-4 px-4 py-2 bg-gray-800 text-white border border-gray-600 rounded-lg w-full focus:ring-2 focus:ring-blue-500 focus:outline-none transition duration-200 ${className}`}
-    />
+    <div className="flex flex-col">
+      {label && (
+        <label htmlFor={name} className="m-4 text-white">
+          {label}
+        </label>
+      )}
+      <input
+        id={name}
+        type={type}
+        placeholder={placeholder}
+        value={value}
+        onChange={onChange}
+        name={name}
+        className={`flex m-4 p-4 bg-gray-800 text-white border border-gray-600 rounded-lg w-full focus:ring-2 focus:ring-blue-500 focus:outline-none transition duration-200 ${className}`}
+      />
+    </div>
   );
 };
 

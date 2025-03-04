@@ -1,16 +1,16 @@
 import { Route, Routes, Navigate } from "react-router-dom";
 import { Suspense, lazy } from "react";
-import Layout from "./layout/Layout.tsx";
+import Layout from "./layout/Layout";
 import Dashboard from "./pages/Dashboard";
 import Loader from "./components/ui/Loader";
 import { AuthProvider } from "./contexts/AuthContext";
 
-// Pages lazy loading froom the pages folder
-// Lazy loading de páginas desde la carpeta "pages"
+// Lazy load pages from the pages folder
 const AuthPage = lazy(() => import("./pages/AuthPage"));
 const Products = lazy(() => import("./pages/Products"));
 const Categories = lazy(() => import("./pages/Categories"));
 const Profile = lazy(() => import("./pages/Profile"));
+const Customers = lazy(() => import("./pages/Customers"));
 
 const App = () => {
   return (
@@ -23,6 +23,7 @@ const App = () => {
             <Route path="/products" element={<Products />} />
             <Route path="/categories" element={<Categories />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/clientes" element={<Customers />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </Suspense>

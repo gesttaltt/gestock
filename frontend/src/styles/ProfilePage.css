@@ -8,6 +8,7 @@
   min-height: 100vh;
   background-color: var(--primary-dark); /* Utiliza la variable global */
   padding: 1rem;
+  border-radius: 10px;
 }
 
 /* Encabezado del perfil (se asume que ProfileHeader ya tiene su propio estilo, si no se puede definir aquí) */
@@ -17,6 +18,11 @@
   font-weight: bold;
   margin-bottom: 1.5rem;
   color: var(--text-light);
+}
+
+.profile-container h2 {
+  color: #ffff;
+  margin-bottom: 1.5rem;
 }
 
 /* Área de información del perfil */

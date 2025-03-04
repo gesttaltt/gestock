@@ -2,29 +2,22 @@ import React, { useEffect, useState } from "react";
 import DashboardHeader from "./DashboardHeader";
 import Loader from "../components/ui/Loader";
 import Alert from "../components/ui/Alert";
-import { getDashboardData } from "../api/authApi"; // Importante: se asume que esta función no requiere token como parámetro
+import { getDashboardData } from "../api/authApi"; // se asume que esta función no requiere token como parámetro
 import { useAuth } from "../contexts/AuthContext";
 
-// Definición de la interfaz de los datos que retorna el backend
+// Interfaz que define solo los datos necesarios para el display seguro
 interface DashboardData {
   totalProducts: number;
   totalCategories: number;
   latestProducts: {
     name: string;
-    price: number;
-    category: string;
-    createdAt: string;
   }[];
   topProducts: {
     name: string;
-    price: number;
-    stock: number;
-    category: string;
   }[];
 }
 
 const Dashboard = () => {
-  // Obtenemos el token del contexto, aunque no lo pasamos explícitamente, ya que el interceptor lo utiliza
   const { token } = useAuth();
   const [data, setData] = useState<DashboardData | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -33,7 +26,6 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Llamada al endpoint de dashboard; axiosInstance adjunta el token automáticamente
         const dashboardData = await getDashboardData();
         setData(dashboardData);
       } catch (err: any) {
@@ -71,8 +63,7 @@ const Dashboard = () => {
             <ul className="list-disc ml-6">
               {data?.latestProducts.map((prod, idx) => (
                 <li key={idx}>
-                  {prod.name} - ${prod.price} - {prod.category} -{" "}
-                  {new Date(prod.createdAt).toLocaleDateString()}
+                  {prod.name}
                 </li>
               ))}
             </ul>
@@ -82,7 +73,7 @@ const Dashboard = () => {
             <ul className="list-disc ml-6">
               {data?.topProducts.map((prod, idx) => (
                 <li key={idx}>
-                  {prod.name} - ${prod.price} - Stock: {prod.stock} - {prod.category}
+                  {prod.name}
                 </li>
               ))}
             </ul>

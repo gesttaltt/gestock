@@ -1,3 +1,5 @@
+//backend/src/models/Product.js --Main model for products database handling
+
 import mongoose from "mongoose";
 
 const productSchema = new mongoose.Schema(

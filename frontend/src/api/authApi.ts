@@ -1,3 +1,5 @@
+// src/api/authApi.ts --main authentication api module that is used by axiosInstance
+
 import axiosInstance from "./axiosInstance";
 
 /**
