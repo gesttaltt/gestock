@@ -6,7 +6,7 @@
   flex-direction: column;
   align-items: center;
   min-height: 100vh;
-  background-color: var(--primary-dark); /* Utiliza la variable global */
+  background-color: var(--primary-dark);
   padding: 1rem;
   border-radius: 10px;
 }

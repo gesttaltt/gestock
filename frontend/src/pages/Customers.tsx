@@ -94,17 +94,18 @@ const CustomersPage: React.FC = () => {
 
   return (
     <div className="customers-container p-6 bg-gray-800 min-h-screen text-white">
-      <div className="max-w-5xl mx-auto">
+      <div className="customers-card max-w-5xl mx-auto">
         <h1 className="customers-header text-3xl font-bold mb-4">Administración de Clientes</h1>
         {error && <Alert message={error} type="error" />}
         {loading ? (
           <Loader />
         ) : (
           <>
+
             {/* Grid de tarjetas para cada cliente */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 max-h-[80vh] overflow-y-auto">
+            <div class="customers-list">
               {customers.map((customer) => (
-                <div key={customer.id} className="bg-blue-500 rounded-lg shadow p-4">
+                <div key={customer.id} class="sortable-customer-card">
                   <p className="font-semibold">{customer.name}</p>
                   <p className="text-sm">{customer.email}</p>
                   <p className="text-sm">{customer.phone}</p>
@@ -114,12 +115,16 @@ const CustomersPage: React.FC = () => {
                 </div>
               ))}
             </div>
-            {/* Botón para abrir modal de agregar nuevo cliente */}
-            <div className="mt-10 flex justify-center">
-              <Button onClick={() => setIsAddModalOpen(true)}>Agregar Nuevo Cliente</Button>
-            </div>
+
+
+
           </>
         )}
+      </div>
+      
+      {/* Botón para abrir modal de agregar nuevo cliente */}
+      <div className="mt-8 flex justify-center">
+        <Button onClick={() => setIsAddModalOpen(true)}>Agregar Nuevo Cliente</Button>
       </div>
 
       {/* Modal para agregar un nuevo cliente */}
