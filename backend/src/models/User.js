@@ -1,6 +1,9 @@
+// File: /backend/src/models/User.js
+
 import mongoose from "mongoose";
-import bcrypt from "bcryptjs";
+import bcrypt from "bcryptjs"; // keep for verifying bcrypt-hashed passwords
 import dotenv from "dotenv";
+import { hashPassword } from "../utils/passwordHasher.js";
 
 dotenv.config();
 
@@ -27,7 +30,7 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: [true, "La contraseña es obligatoria"],
       minlength: [6, "La contraseña debe tener al menos 6 caracteres"],
-      select: false, // No se retorna por defecto en las consultas para mayor seguridad
+      select: false, // no se retorna por defecto en las consultas para mayor seguridad
     },
     role: {
       type: String,
@@ -38,7 +41,7 @@ const userSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// Excluir la contraseña al convertir a JSON (por ejemplo, al enviar respuestas en API)
+// Excluir la contraseña al convertir a JSON
 userSchema.set("toJSON", {
   transform: function (doc, ret) {
     delete ret.password;
@@ -49,9 +52,10 @@ userSchema.set("toJSON", {
 // Pre-save hook para hashear la contraseña si es nueva o ha sido modificada
 userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
+
   try {
-    // Hashea la contraseña y la asigna al campo 'password'
-    this.password = await bcrypt.hash(this.password, SALT_ROUNDS);
+    const { hash } = await hashPassword(this.password);
+    this.password = hash;
     next();
   } catch (err) {
     next(err);
@@ -59,13 +63,35 @@ userSchema.pre("save", async function (next) {
 });
 
 // Método para comparar la contraseña ingresada con la almacenada
-// Nota: Cuando uses este método, asegúrate de que la consulta incluya explícitamente el campo 'password'
-// (por ejemplo, usando .select("+password"))
 userSchema.methods.comparePassword = async function (enteredPassword) {
+  // Si el hash comienza con "$argon2", es Argon2id
+  if (this.password.startsWith("$argon2")) {
+    const argon2 = require("argon2");
+    return argon2.verify(this.password, enteredPassword);
+  }
+  // Si el hash contiene ":", asumimos scrypt (almacenado como "salt:derivedKey")
+  if (this.password.includes(":")) {
+    const [saltHex, keyHex] = this.password.split(":");
+    const salt = Buffer.from(saltHex, "hex");
+    const keyLength = Buffer.from(keyHex, "hex").length;
+
+    return new Promise((resolve, reject) => {
+      require("crypto").scrypt(
+        enteredPassword,
+        salt,
+        keyLength,
+        { cost: 217, blockSize: 8 },
+        (err, derivedKey) => {
+          if (err) return reject(err);
+          resolve(derivedKey.toString("hex") === keyHex);
+        }
+      );
+    });
+  }
+  // De lo contrario, asumimos que es bcrypt
   return bcrypt.compare(enteredPassword, this.password);
 };
 
-// Método para verificar si el usuario es administrador
 userSchema.methods.isAdmin = function () {
   return this.role === "admin";
 };

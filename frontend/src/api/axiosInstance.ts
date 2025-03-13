@@ -1,5 +1,6 @@
-// src/api/axiosInstance.ts -Main router of every other api service module
-
+/*
+ src/api/axiosInstance.ts
+*/
 import axios from "axios";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
@@ -10,7 +11,7 @@ const axiosInstance = axios.create({
   withCredentials: true,
 });
 
-// Interceptor para adjuntar el token de autenticación en cada solicitud
+// Request interceptor to attach the authentication token to each request
 axiosInstance.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("token");
@@ -22,14 +23,14 @@ axiosInstance.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// Interceptor para manejar respuestas de error (Si el token es inválido o esta expirado)
+// Response interceptor to handle error responses (e.g. token invalid or expired)
 axiosInstance.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response && error.response.status === 401) {
       console.warn("[AUTH] Token inválido o expirado. Redirigiendo al login...");
       localStorage.removeItem("token");
-      // Referencia a la ruta de autenticacion /auth
+      // Redirect to the authentication route /auth
       window.location.href = "/auth";
     }
     return Promise.reject(error);
@@ -37,15 +38,15 @@ axiosInstance.interceptors.response.use(
 );
 
 /**
- * Obtiene los datos del dashboard mediante Axios
+ * Obtiene los datos del dashboard mediante Axios.
  */
-export const fetchDashboardData = async () => {
+export const fetchDashboardData = async (): Promise<any | null> => {
   try {
     console.log("[DEBUG] Llamando a /dashboard desde frontend...");
     const response = await axiosInstance.get("/dashboard");
     console.log("[DEBUG] Datos del Dashboard recibidos:", response.data);
     return response.data;
-  } catch (error) {
+  } catch (error: any) {
     console.error(
       "[ERROR] No se pudieron obtener los datos del Dashboard:",
       error.response?.data || error.message

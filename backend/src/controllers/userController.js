@@ -1,12 +1,15 @@
+// File: /backend/src/controllers/userController.js
+
 import dotenv from "dotenv";
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
+import { hashPassword } from "../utils/passwordHasher.js"; // <-- New import, not directly used
 
 dotenv.config({ path: "./.env" });
 
 /**
  * Register a new user in the database
- * Trusts in the model pre-save hook to hash the password
+ * Relies on the User model's pre-save hook to hash the password
  */
 export const registerUser = async (req, res) => {
   try {
@@ -17,13 +20,13 @@ export const registerUser = async (req, res) => {
       return res.status(400).json({ message: "Todos los campos son obligatorios" });
     }
 
-    // Email format validation regex
+    // Email format validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       return res.status(400).json({ message: "El correo electrónico no es válido" });
     }
 
-    // Password lenght validation (Min: 6 characters)
+    // Password length validation (Min: 6 characters)
     if (password.length < 6) {
       return res.status(400).json({ message: "La contraseña debe tener al menos 6 caracteres" });
     }
@@ -34,12 +37,12 @@ export const registerUser = async (req, res) => {
       return res.status(400).json({ message: "El correo electrónico ya está en uso" });
     }
 
-    // User creation in mongoDB, the pre-hook is going to hash the password
+    // User creation in MongoDB; the pre-save hook in User.js will hash the password
     const newUser = new User({
       name,
       email: email.toLowerCase(),
       password,
-      role: role || "user", // Por defecto, asigna rol "user"
+      role: role || "user", // por defecto, asigna rol "user"
     });
 
     await newUser.save();
@@ -61,7 +64,7 @@ export const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    //Email and password validations
+    // Email and password validations
     if (!email || !password) {
       return res.status(400).json({ message: "Email y contraseña son obligatorios" });
     }
@@ -69,26 +72,26 @@ export const loginUser = async (req, res) => {
       return res.status(400).json({ message: "El correo electrónico no es válido" });
     }
 
-    //Finds user by email and selects the password field
+    // Finds user by email and includes the password field
     const user = await User.findOne({ email: email.toLowerCase() }).select("+password");
     if (!user) {
       return res.status(404).json({ message: "Usuario no encontrado" });
     }
 
-    //Password comparing using the model method
+    // Compare password using the model's method (handles bcrypt/argon2/scrypt)
     const isMatch = await user.comparePassword(password);
     if (!isMatch) {
       return res.status(400).json({ message: "Credenciales incorrectas" });
     }
 
-    // Defined JWT_SECRET verification
+    // JWT secret verification
     const jwtSecret = process.env.JWT_SECRET;
     if (!jwtSecret) {
       console.error("JWT_SECRET no está definido en el entorno");
       return res.status(500).json({ message: "Error interno del servidor" });
     }
 
-    //JWT token generation (1 hour expiration)
+    // Generate JWT token (1 hour expiration)
     const token = jwt.sign(
       { id: user._id, role: user.role },
       jwtSecret,
@@ -109,8 +112,8 @@ export const loginUser = async (req, res) => {
 };
 
 /**
- * Obtains authenticated user profile
- * Assumes that authentication middleware assigns userID in req.user
+ * Obtains the authenticated user's profile
+ * Assumes that the authentication middleware assigns userID in req.user
  */
 export const getProfile = async (req, res) => {
   try {
@@ -130,8 +133,8 @@ export const getProfile = async (req, res) => {
 };
 
 /**
- * Updates the authenticated user profile
- * Allows updating name, email and password if its not given
+ * Updates the authenticated user's profile
+ * Allows updating name, email, and password (the pre-save hook handles hashing)
  */
 export const updateProfile = async (req, res) => {
   try {
@@ -143,7 +146,7 @@ export const updateProfile = async (req, res) => {
 
     if (req.body.name) user.name = req.body.name;
     if (req.body.email) user.email = req.body.email.toLowerCase();
-    if (req.body.password) user.password = req.body.password; // Pre-save Hook saving of the password
+    if (req.body.password) user.password = req.body.password; // triggers hashing in pre-save
 
     await user.save();
 
@@ -158,7 +161,7 @@ export const updateProfile = async (req, res) => {
 };
 
 /**
- * Obtains a list of all the users (Admin only)
+ * Obtains a list of all users (Admin only)
  */
 export const getAllUsers = async (req, res) => {
   try {
@@ -174,7 +177,7 @@ export const getAllUsers = async (req, res) => {
 };
 
 /**
- * UserID user deletion (Admin only).
+ * Deletes a user by ID (Admin only)
  */
 export const deleteUser = async (req, res) => {
   try {

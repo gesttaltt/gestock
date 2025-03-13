@@ -1,4 +1,6 @@
-// /contexts/AuthContext.tsx --Authentication context module component
+/*
+  AuthContext.tsx
+*/
 import React, {
   createContext,
   useContext,
@@ -8,7 +10,7 @@ import React, {
 } from "react";
 import { getProfile, loginUser } from "../api/authApi";
 
-// Define la interfaz del usuario
+// Define the user interface
 interface User {
   id: string;
   role: string;
@@ -16,7 +18,7 @@ interface User {
   email?: string;
 }
 
-// Define la interfaz del contexto de autenticación
+// Define the authentication context interface
 interface AuthContextType {
   token: string | null;
   user: User | null;
@@ -26,18 +28,16 @@ interface AuthContextType {
   refreshProfile: () => Promise<void>;
 }
 
-// Crea el contexto
+// Create the authentication context
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [token, setToken] = useState<string | null>(
-    localStorage.getItem("token")
-  );
+export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+  const [token, setToken] = useState<string | null>(localStorage.getItem("token"));
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
-  // Función para refrescar el perfil del usuario
-  const refreshProfile = async () => {
+  // Function to refresh the user profile
+  const refreshProfile = async (): Promise<void> => {
     try {
       const profile = await getProfile();
       if (profile) {
@@ -50,7 +50,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       } else {
         setUser(null);
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error al refrescar el perfil:", error);
       setUser(null);
     } finally {
@@ -58,8 +58,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  // Función para iniciar sesión
-  const login = async (credentials: { email: string; password: string }): Promise<boolean> => {
+  // Function to log in
+  const login = async (
+    credentials: { email: string; password: string }
+  ): Promise<boolean> => {
     try {
       const response = await loginUser(credentials);
       if (response && response.token) {
@@ -69,14 +71,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         return true;
       }
       return false;
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error al iniciar sesión:", error);
       return false;
     }
   };
 
-  // Función para cerrar sesión
-  const logout = () => {
+  // Function to log out
+  const logout = (): void => {
     localStorage.removeItem("token");
     setToken(null);
     setUser(null);
@@ -91,9 +93,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, [token]);
 
   return (
-    <AuthContext.Provider
-      value={{ token, user, loading, login, logout, refreshProfile }}
-    >
+    <AuthContext.Provider value={{ token, user, loading, login, logout, refreshProfile }}>
       {children}
     </AuthContext.Provider>
   );

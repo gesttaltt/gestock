@@ -1,5 +1,8 @@
+/*
+ Categories.tsx
+*/
+import React, { useEffect, useState, ChangeEvent, FormEvent } from "react";
 import CategoriesHeader from "./CategoriesHeader";
-import { useEffect, useState } from "react";
 import {
   fetchCategories,
   createCategory,
@@ -14,17 +17,26 @@ import Button from "../components/ui/Button";
 import Form from "../components/ui/Form";
 import Input from "../components/ui/Input";
 
-const Categories = () => {
-  const [categories, setCategories] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+interface Category {
+  _id: string;
+  name: string;
+  description?: string;
+}
+
+const Categories: React.FC = () => {
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
 
   // State for creating a new category
-  const [newCategory, setNewCategory] = useState({ name: "", description: "" });
+  const [newCategory, setNewCategory] = useState<{ name: string; description: string }>({
+    name: "",
+    description: "",
+  });
   // State for the category being edited
-  const [editingCategory, setEditingCategory] = useState(null);
+  const [editingCategory, setEditingCategory] = useState<Category | null>(null);
 
   // Load categories from the backend
   useEffect(() => {
@@ -42,7 +54,7 @@ const Categories = () => {
   }, []);
 
   // Handler for creating a new category
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
     setError(null);
 
@@ -67,27 +79,33 @@ const Categories = () => {
   };
 
   // Open the edit modal with the selected category's data
-  const handleEditClick = (category) => {
+  const handleEditClick = (category: Category): void => {
     setEditingCategory(category);
     setIsEditModalOpen(true);
     setError(null);
   };
 
   // Handler for updating a category
-  const handleEditSubmit = async (e) => {
+  const handleEditSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
     setError(null);
 
-    if (!editingCategory.name.trim()) {
+    if (!editingCategory || !editingCategory.name.trim()) {
       setError("El nombre de la categoría es obligatorio");
       return;
     }
 
     try {
       const updated = await updateCategory(editingCategory._id, editingCategory);
-      setCategories(categories.map((cat) => (cat._id === updated._id ? updated : cat)));
-      setEditingCategory(null);
-      setIsEditModalOpen(false);
+      if (updated) {
+        setCategories(
+          categories.map((cat) => (cat._id === updated._id ? updated : cat))
+        );
+        setEditingCategory(null);
+        setIsEditModalOpen(false);
+      } else {
+        setError("Error al actualizar la categoría");
+      }
     } catch (error) {
       console.error("Error al actualizar la categoría:", error);
       setError("Error al actualizar la categoría");
@@ -95,11 +113,15 @@ const Categories = () => {
   };
 
   // Handler for deleting a category
-  const handleDelete = async (id) => {
+  const handleDelete = async (id: string): Promise<void> => {
     if (!window.confirm("¿Está seguro de eliminar esta categoría?")) return;
     try {
-      await deleteCategory(id);
-      setCategories(categories.filter((cat) => cat._id !== id));
+      const result = await deleteCategory(id);
+      if (result) {
+        setCategories(categories.filter((cat) => cat._id !== id));
+      } else {
+        setError("Error al eliminar la categoría");
+      }
     } catch (error) {
       console.error("Error al eliminar la categoría:", error);
       setError("Error al eliminar la categoría");
@@ -128,7 +150,7 @@ const Categories = () => {
               <Button
                 onClick={() => handleDelete(category._id)}
                 className="ml-2"
-                variant="danger"
+                type="button"
               >
                 Eliminar
               </Button>
@@ -148,17 +170,19 @@ const Categories = () => {
             type="text"
             placeholder="Nombre de la categoría"
             value={newCategory.name}
-            onChange={(e) =>
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
               setNewCategory({ ...newCategory, name: e.target.value })
             }
+            name="categoryName"
           />
           <Input
             type="text"
             placeholder="Descripción"
             value={newCategory.description}
-            onChange={(e) =>
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
               setNewCategory({ ...newCategory, description: e.target.value })
             }
+            name="categoryDescription"
           />
           <Button type="submit" className="w-full">
             Guardar
@@ -177,23 +201,25 @@ const Categories = () => {
             type="text"
             placeholder="Nombre de la categoría"
             value={editingCategory?.name || ""}
-            onChange={(e) =>
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
               setEditingCategory({
-                ...editingCategory,
+                ...editingCategory!,
                 name: e.target.value,
               })
             }
+            name="editCategoryName"
           />
           <Input
             type="text"
             placeholder="Descripción"
             value={editingCategory?.description || ""}
-            onChange={(e) =>
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
               setEditingCategory({
-                ...editingCategory,
+                ...editingCategory!,
                 description: e.target.value,
               })
             }
+            name="editCategoryDescription"
           />
           <Button type="submit" className="w-full">
             Actualizar

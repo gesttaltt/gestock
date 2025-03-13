@@ -1,6 +1,14 @@
-import { useEffect, useState } from "react";
+/*
+ Products.tsx
+*/
+import React, { useEffect, useState, ChangeEvent, FormEvent } from "react";
 import ProductsHeader from "./ProductsHeader";
-import { fetchProducts, createProduct, updateProduct, deleteProduct } from "../api/productApi";
+import {
+  fetchProducts,
+  createProduct,
+  updateProduct,
+  deleteProduct,
+} from "../api/productApi";
 import { fetchCategories } from "../api/categoryApi"; // Obtiene categorías reales
 import Card from "../components/ui/Card";
 import Loader from "../components/ui/Loader";
@@ -10,18 +18,38 @@ import Button from "../components/ui/Button";
 import Form from "../components/ui/Form";
 import Input from "../components/ui/Input";
 
-const Products = () => {
-  const [products, setProducts] = useState([]);
-  const [categories, setCategories] = useState([]); // Categorías reales
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  
-  // Estado para crear un nuevo producto
-  const [newProduct, setNewProduct] = useState({ name: "", category: "", price: "", stock: "" });
-  // Estado para editar producto
-  const [editProduct, setEditProduct] = useState(null);
-  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+// Define interfaces for Product and Category
+interface Category {
+  _id: string;
+  name: string;
+  description?: string;
+}
+
+interface Product {
+  _id: string;
+  name: string;
+  category: string;
+  price: number;
+  stock: number;
+}
+
+const Products: React.FC = () => {
+  const [products, setProducts] = useState<Product[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+
+  // State for creating a new product (all values as strings initially)
+  const [newProduct, setNewProduct] = useState({
+    name: "",
+    category: "",
+    price: "",
+    stock: "",
+  });
+  // State for editing a product
+  const [editProduct, setEditProduct] = useState<Product | null>(null);
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState<boolean>(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
 
   useEffect(() => {
     const loadData = async () => {
@@ -30,7 +58,7 @@ const Products = () => {
         setProducts(productsData);
         const categoriesData = await fetchCategories();
         setCategories(categoriesData);
-      } catch (error) {
+      } catch (err) {
         setError("Error al cargar los datos");
       } finally {
         setLoading(false);
@@ -39,15 +67,23 @@ const Products = () => {
     loadData();
   }, []);
 
-  const handleCreateSubmit = async (e) => {
+  const handleCreateSubmit = async (
+    e: FormEvent<HTMLFormElement>
+  ): Promise<void> => {
     e.preventDefault();
     setError(null);
-    // Validación simple
-    if (!newProduct.name || !newProduct.category || !newProduct.price || !newProduct.stock) {
+    // Validación simple: chequea que ningún campo esté vacío
+    if (
+      !newProduct.name ||
+      !newProduct.category ||
+      !newProduct.price ||
+      !newProduct.stock
+    ) {
       setError("Todos los campos son obligatorios");
       return;
     }
     try {
+      // Convertir price y stock a números
       const productToCreate = {
         ...newProduct,
         price: Number(newProduct.price),
@@ -67,19 +103,28 @@ const Products = () => {
     }
   };
 
-  const handleEditClick = (product) => {
+  const handleEditClick = (product: Product): void => {
     setEditProduct(product);
     setIsEditModalOpen(true);
   };
 
-  const handleEditSubmit = async (e) => {
+  const handleEditSubmit = async (
+    e: FormEvent<HTMLFormElement>
+  ): Promise<void> => {
     e.preventDefault();
     setError(null);
-    if (!editProduct.name || !editProduct.category || !editProduct.price || !editProduct.stock) {
+    if (
+      !editProduct ||
+      !editProduct.name ||
+      !editProduct.category ||
+      !editProduct.price ||
+      !editProduct.stock
+    ) {
       setError("Todos los campos son obligatorios");
       return;
     }
     try {
+      // Asegurarse de que price y stock sean números
       const productToUpdate = {
         ...editProduct,
         price: Number(editProduct.price),
@@ -87,7 +132,9 @@ const Products = () => {
       };
       const updated = await updateProduct(editProduct._id, productToUpdate);
       if (updated) {
-        setProducts(products.map((p) => (p._id === updated._id ? updated : p)));
+        setProducts(
+          products.map((p) => (p._id === updated._id ? updated : p))
+        );
         setIsEditModalOpen(false);
         setEditProduct(null);
       } else {
@@ -99,8 +146,10 @@ const Products = () => {
     }
   };
 
-  const handleDelete = async (id) => {
-    const confirmDelete = window.confirm("¿Estás seguro de eliminar este producto?");
+  const handleDelete = async (id: string): Promise<void> => {
+    const confirmDelete = window.confirm(
+      "¿Estás seguro de eliminar este producto?"
+    );
     if (!confirmDelete) return;
     try {
       const deleted = await deleteProduct(id);
@@ -121,7 +170,9 @@ const Products = () => {
     <div className="p-6 bg-gray-900 text-white min-h-screen">
       <ProductsHeader />
       <div className="flex justify-between items-center mt-4">
-        <Button onClick={() => setIsCreateModalOpen(true)}>Agregar Producto</Button>
+        <Button onClick={() => setIsCreateModalOpen(true)}>
+          Agregar Producto
+        </Button>
       </div>
       {error && <Alert message={error} type="error" />}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
@@ -149,19 +200,21 @@ const Products = () => {
             type="text"
             placeholder="Nombre del producto"
             value={newProduct.name}
-            onChange={(e) =>
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
               setNewProduct({ ...newProduct, name: e.target.value })
             }
+            name="productName"
           />
           <select
             value={newProduct.category}
-            onChange={(e) =>
+            onChange={(e: ChangeEvent<HTMLSelectElement>) =>
               setNewProduct({ ...newProduct, category: e.target.value })
             }
             className="p-2 m-2 bg-gray-800 text-white rounded"
           >
-            <option value=""
-            className="p-2 m-2 gap-4">Seleccione una categoría</option>
+            <option value="" className="p-2 m-2 gap-4">
+              Seleccione una categoría
+            </option>
             {categories.map((cat) => (
               <option key={cat._id} value={cat._id}>
                 {cat.name}
@@ -172,17 +225,19 @@ const Products = () => {
             type="number"
             placeholder="Precio"
             value={newProduct.price}
-            onChange={(e) =>
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
               setNewProduct({ ...newProduct, price: e.target.value })
             }
+            name="productPrice"
           />
           <Input
             type="number"
             placeholder="Stock"
             value={newProduct.stock}
-            onChange={(e) =>
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
               setNewProduct({ ...newProduct, stock: e.target.value })
             }
+            name="productStock"
           />
           <Button type="submit" className="w-full">
             Guardar
@@ -204,13 +259,14 @@ const Products = () => {
               type="text"
               placeholder="Nombre del producto"
               value={editProduct.name}
-              onChange={(e) =>
+              onChange={(e: ChangeEvent<HTMLInputElement>) =>
                 setEditProduct({ ...editProduct, name: e.target.value })
               }
+              name="editProductName"
             />
             <select
               value={editProduct.category}
-              onChange={(e) =>
+              onChange={(e: ChangeEvent<HTMLSelectElement>) =>
                 setEditProduct({ ...editProduct, category: e.target.value })
               }
               className="p-2 bg-gray-800 text-white rounded"
@@ -225,18 +281,20 @@ const Products = () => {
             <Input
               type="number"
               placeholder="Precio"
-              value={editProduct.price}
-              onChange={(e) =>
+              value={String(editProduct.price)}
+              onChange={(e: ChangeEvent<HTMLInputElement>) =>
                 setEditProduct({ ...editProduct, price: e.target.value })
               }
+              name="editProductPrice"
             />
             <Input
               type="number"
               placeholder="Stock"
-              value={editProduct.stock}
-              onChange={(e) =>
+              value={String(editProduct.stock)}
+              onChange={(e: ChangeEvent<HTMLInputElement>) =>
                 setEditProduct({ ...editProduct, stock: e.target.value })
               }
+              name="editProductStock"
             />
             <Button type="submit" className="w-full mt-4">
               Guardar Cambios

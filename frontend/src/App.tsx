@@ -1,5 +1,8 @@
+/*
+ App.tsx
+*/
+import React, { Suspense, lazy } from "react";
 import { Route, Routes, Navigate } from "react-router-dom";
-import { Suspense, lazy } from "react";
 import Layout from "./layout/Layout";
 import Dashboard from "./pages/Dashboard";
 import Loader from "./components/ui/Loader";
@@ -12,7 +15,7 @@ const Categories = lazy(() => import("./pages/Categories"));
 const Profile = lazy(() => import("./pages/Profile"));
 const Customers = lazy(() => import("./pages/Customers"));
 
-const App = () => {
+const App: React.FC = () => {
   return (
     <AuthProvider>
       <Layout>

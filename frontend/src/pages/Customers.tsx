@@ -1,4 +1,7 @@
-import React, { useState, useEffect, FormEvent } from "react";
+/*
+ Customers.tsx
+*/
+import React, { useState, useEffect, ChangeEvent, FormEvent } from "react";
 import Alert from "../components/ui/Alert";
 import Button from "../components/ui/Button";
 import Input from "../components/ui/Input";
@@ -7,8 +10,8 @@ import Modal from "../components/ui/Modal";
 import "../styles/customersPage.css";
 import { getCustomers, addCustomer, updateCustomer } from "../api/customersApi";
 
-// Definición de la interfaz para Customer
-interface Customer {
+// Define la interfaz para Customer
+export interface Customer {
   id: number;
   name: string;
   email: string;
@@ -43,13 +46,13 @@ const CustomersPage: React.FC = () => {
     fetchCustomersData();
   }, []);
 
-  // Manejador de inputs para los formularios
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  // Manejador de inputs para el formulario de agregar cliente
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>): void => {
     setNewCustomer({ ...newCustomer, [e.target.name]: e.target.value });
   };
 
   // Función para agregar un nuevo cliente
-  const handleAddCustomer = async (e: FormEvent) => {
+  const handleAddCustomer = async (e: FormEvent): Promise<void> => {
     e.preventDefault();
     if (!newCustomer.name || !newCustomer.email || !newCustomer.phone) {
       setError("Por favor, rellene todos los campos.");
@@ -73,13 +76,13 @@ const CustomersPage: React.FC = () => {
   };
 
   // Abrir modal para editar cliente
-  const openEditModal = (customer: Customer) => {
+  const openEditModal = (customer: Customer): void => {
     setSelectedCustomer(customer);
     setIsEditModalOpen(true);
   };
 
   // Función para actualizar cliente
-  const handleUpdateCustomer = async (updatedCustomer: Customer) => {
+  const handleUpdateCustomer = async (updatedCustomer: Customer): Promise<void> => {
     try {
       const updatedData = await updateCustomer(updatedCustomer.id, updatedCustomer);
       setCustomers((prev) =>
@@ -95,17 +98,18 @@ const CustomersPage: React.FC = () => {
   return (
     <div className="customers-container p-6 bg-gray-800 min-h-screen text-white">
       <div className="customers-card max-w-5xl mx-auto">
-        <h1 className="customers-header text-3xl font-bold mb-4">Administración de Clientes</h1>
+        <h1 className="customers-header text-3xl font-bold mb-4">
+          Administración de Clientes
+        </h1>
         {error && <Alert message={error} type="error" />}
         {loading ? (
           <Loader />
         ) : (
           <>
-
             {/* Grid de tarjetas para cada cliente */}
-            <div class="customers-list">
+            <div className="customers-list">
               {customers.map((customer) => (
-                <div key={customer.id} class="sortable-customer-card">
+                <div key={customer.id} className="sortable-customer-card">
                   <p className="font-semibold">{customer.name}</p>
                   <p className="text-sm">{customer.email}</p>
                   <p className="text-sm">{customer.phone}</p>
@@ -115,13 +119,10 @@ const CustomersPage: React.FC = () => {
                 </div>
               ))}
             </div>
-
-
-
           </>
         )}
       </div>
-      
+
       {/* Botón para abrir modal de agregar nuevo cliente */}
       <div className="mt-8 flex justify-center">
         <Button onClick={() => setIsAddModalOpen(true)}>Agregar Nuevo Cliente</Button>
@@ -129,7 +130,11 @@ const CustomersPage: React.FC = () => {
 
       {/* Modal para agregar un nuevo cliente */}
       {isAddModalOpen && (
-        <Modal isOpen={isAddModalOpen} onClose={() => setIsAddModalOpen(false)} title="Agregar Nuevo Cliente">
+        <Modal
+          isOpen={isAddModalOpen}
+          onClose={() => setIsAddModalOpen(false)}
+          title="Agregar Nuevo Cliente"
+        >
           <form onSubmit={handleAddCustomer} className="modal-form space-y-4 p-4">
             <Input
               label="Nombre"
@@ -164,7 +169,11 @@ const CustomersPage: React.FC = () => {
 
       {/* Modal para editar cliente */}
       {isEditModalOpen && selectedCustomer && (
-        <Modal isOpen={isEditModalOpen} onClose={() => setIsEditModalOpen(false)} title="Editar Cliente">
+        <Modal
+          isOpen={isEditModalOpen}
+          onClose={() => setIsEditModalOpen(false)}
+          title="Editar Cliente"
+        >
           <CustomerEditForm
             customer={selectedCustomer}
             onUpdate={handleUpdateCustomer}
@@ -182,14 +191,18 @@ interface CustomerEditFormProps {
   onCancel: () => void;
 }
 
-const CustomerEditForm: React.FC<CustomerEditFormProps> = ({ customer, onUpdate, onCancel }) => {
+const CustomerEditForm: React.FC<CustomerEditFormProps> = ({
+  customer,
+  onUpdate,
+  onCancel,
+}) => {
   const [formData, setFormData] = useState<Customer>(customer);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>): void => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = (e: FormEvent): void => {
     e.preventDefault();
     onUpdate(formData);
   };

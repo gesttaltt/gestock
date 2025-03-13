@@ -1,6 +1,7 @@
 import express from "express";
 import { registerUser, loginUser, getProfile, updateProfile } from "../controllers/userController.js";
 import authMiddleware from "../middleware/authMiddleware.js";
+import { hashPassword } from "../utils/passwordHasher.js"; // New import for hashing utility
 
 const router = express.Router();
 

@@ -1,20 +1,28 @@
-import { useState } from "react";
+/*
+ Layout.tsx
+*/
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import "../styles/layout.css";
 
-const Layout = ({ children }: { children: React.ReactNode }) => {
-  const [inventarioOpen, setInventarioOpen] = useState(false);
-  const [clientesOpen, setClientesOpen] = useState(false);
-  const [cuentaOpen, setCuentaOpen] = useState(false);
+interface LayoutProps {
+  children: React.ReactNode;
+}
+
+const Layout: React.FC<LayoutProps> = ({ children }) => {
+  const [inventarioOpen, setInventarioOpen] = useState<boolean>(false);
+  const [clientesOpen, setClientesOpen] = useState<boolean>(false);
+  const [cuentaOpen, setCuentaOpen] = useState<boolean>(false);
 
   return (
     <div className="flex h-screen">
       <nav className="w-64 bg-gray-800 text-white p-4">
         <h1 className="text-xl font-bold">Gestock</h1>
-        <ul className="mt-4 space-y-2">
+        <ul className="nav-list mt-4">
           <li>
-            <Link to="/" className="flex p-2 hover:bg-gray-700 rounded">
-            <img className="flex" src="/gestock-favicon.svg" alt="Gestock Logo" />
+            <Link to="/" className="dashboard-link">
+              <img src="/gestock-favicon.svg" alt="Gestock Logo" />
+              <span className="text-sm font-medium">Dashboard</span>
             </Link>
           </li>
           <li>

@@ -1,3 +1,6 @@
+/*
+ Input.tsx
+*/
 import React from "react";
 
 interface InputProps {
@@ -5,7 +8,7 @@ interface InputProps {
   placeholder?: string;
   value: string;
   onChange: React.ChangeEventHandler<HTMLInputElement>;
-  name: string;
+  name?: string; // Made optional for minimal changes
   className?: string;
   label?: string;
 }
@@ -15,13 +18,13 @@ const Input: React.FC<InputProps> = ({
   placeholder,
   value,
   onChange,
-  name,
+  name = "", // Default to an empty string if not provided
   className = "",
   label,
 }) => {
   return (
     <div className="flex flex-col">
-      {label && (
+      {label && name && (
         <label htmlFor={name} className="m-4 text-white">
           {label}
         </label>

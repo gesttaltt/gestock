@@ -7,23 +7,43 @@ import Modal from "../components/ui/Modal";
 import Button from "../components/ui/Button";
 import Form from "../components/ui/Form";
 import Input from "../components/ui/Input";
-import "../styles/ProfilePage.css";
+import "../styles/profilePage.css";
 
-const Profile = () => {
-  const [profile, setProfile] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+// Define Profile Interface
+interface ProfileData {
+  name: string;
+  email: string;
+  role: string;
+}
 
-  // Estado para el formulario de edición, la contraseña es opcional
-  const [editData, setEditData] = useState({ name: "", email: "", password: "" });
+// Define Editable Data Interface
+interface EditProfileData {
+  name: string;
+  email: string;
+  password?: string;
+}
+
+const Profile: React.FC = () => {
+  const [profile, setProfile] = useState<ProfileData | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
+  const [editData, setEditData] = useState<EditProfileData>({
+    name: "",
+    email: "",
+    password: "",
+  });
 
   useEffect(() => {
     const loadProfile = async () => {
       try {
         const data = await getProfile();
-        setProfile(data);
-        setEditData({ name: data.name, email: data.email, password: "" });
+        if (data) {
+          setProfile(data);
+          setEditData({ name: data.name, email: data.email, password: "" });
+        } else {
+          throw new Error("No se pudo cargar el perfil");
+        }
       } catch (err) {
         setError("Error al cargar el perfil");
       } finally {
@@ -33,18 +53,23 @@ const Profile = () => {
     loadProfile();
   }, []);
 
-  const handleEditSubmit = async (e) => {
+  const handleEditSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError(null);
 
-    if (!editData.name || !editData.email) {
+    if (!editData.name.trim() || !editData.email.trim()) {
       setError("El nombre y el email son obligatorios");
       return;
     }
 
     try {
-      const updatedFields = { name: editData.name, email: editData.email };
-      if (editData.password) updatedFields.password = editData.password;
+      const updatedFields: EditProfileData = {
+        name: editData.name.trim(),
+        email: editData.email.trim(),
+      };
+      if (editData.password?.trim()) {
+        updatedFields.password = editData.password.trim();
+      }
 
       const updatedProfile = await updateProfile(updatedFields);
       if (updatedProfile) {
@@ -67,18 +92,20 @@ const Profile = () => {
       <ProfileHeader />
       <div className="profile-info">
         <p>
-          <strong>Nombre:</strong> {profile.name}
+          <strong>Nombre:</strong> {profile?.name}
         </p>
         <p>
-          <strong>Email:</strong> {profile.email}
+          <strong>Email:</strong> {profile?.email}
         </p>
         <p>
-          <strong>Rol:</strong> {profile.role}
+          <strong>Rol:</strong> {profile?.role}
         </p>
       </div>
       <Button onClick={() => setIsEditModalOpen(true)} className="edit-button">
         Editar Perfil
       </Button>
+
+      {/* Modal for Editing Profile */}
       <Modal
         isOpen={isEditModalOpen}
         onClose={() => setIsEditModalOpen(false)}
@@ -87,21 +114,30 @@ const Profile = () => {
         <Form onSubmit={handleEditSubmit}>
           <Input
             type="text"
+            name="name"
             placeholder="Nombre"
             value={editData.name}
-            onChange={(e) => setEditData({ ...editData, name: e.target.value })}
+            onChange={(e) =>
+              setEditData({ ...editData, name: e.target.value })
+            }
           />
           <Input
             type="email"
+            name="email"
             placeholder="Email"
             value={editData.email}
-            onChange={(e) => setEditData({ ...editData, email: e.target.value })}
+            onChange={(e) =>
+              setEditData({ ...editData, email: e.target.value })
+            }
           />
           <Input
             type="password"
+            name="password"
             placeholder="Nueva contraseña (opcional)"
             value={editData.password}
-            onChange={(e) => setEditData({ ...editData, password: e.target.value })}
+            onChange={(e) =>
+              setEditData({ ...editData, password: e.target.value })
+            }
           />
           <Button type="submit" className="w-full mt-4">
             Guardar Cambios

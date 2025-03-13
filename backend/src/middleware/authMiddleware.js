@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const authMiddleware = (req, res, next) => {
+
   // Si ya se ha autenticado el usuario, saltar la verificación.
   if (req.user) return next();
 

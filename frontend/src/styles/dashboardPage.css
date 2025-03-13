@@ -1,0 +1,36 @@
+/* dashboardPage.css */
+
+/* Contenedor principal de los gráficos */
+.data-visualization {
+  display: grid;
+  /* 
+     auto-fit permite que el grid se adapte a cualquier ancho, 
+     minmax(300px, 1fr) asegura que cada "celda" tenga al menos 300px 
+     y hasta llenar el espacio disponible. 
+  */
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem; /* Espacio entre gráficos */
+  margin-top: 2rem; /* Separación respecto a la sección anterior */
+}
+
+/* Contenedores de los gráficos individuales */
+.chart-container {
+  /* 
+    Limita la altura de cada gráfico y deja que el ancho 
+    se ajuste hasta el máximo permitido por la celda del grid. 
+  */
+  max-width: 500px; /* Ajusta según tu preferencia */
+  margin: 0 auto; /* Centra el gráfico dentro de su celda */
+  margin-bottom: 1rem;
+}
+
+/* Ajustes específicos para el canvas */
+.doughnut {
+  height: 250px; /* Ajusta a tu gusto */
+  width: 100%;
+}
+
+.bar {
+  height: 400px;
+  width: 100%;
+}

@@ -1,4 +1,7 @@
-import { useState } from "react";
+/*
+ AuthPage.tsx
+*/
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { loginUser, registerUser } from "../api/authApi";
 import Alert from "../components/ui/Alert";
@@ -8,18 +11,18 @@ import Input from "../components/ui/Input";
 import Button from "../components/ui/Button";
 import "../styles/AuthPage.css"; // Importa los estilos específicos para AuthPage
 
-const AuthPage = () => {
-  const [isLogin, setIsLogin] = useState(true);
-  const [name, setName] = useState(""); // Solo para registro
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
+const AuthPage: React.FC = () => {
+  const [isLogin, setIsLogin] = useState<boolean>(true);
+  const [name, setName] = useState<string>(""); // Solo para registro
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
 
   const navigate = useNavigate();
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
     setError(null);
     setSuccess(null);

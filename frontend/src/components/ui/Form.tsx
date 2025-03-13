@@ -1,4 +1,15 @@
-const Form = ({ onSubmit, children, className = "" }) => {
+/*
+ Form.tsx
+*/
+import React from "react";
+
+interface FormProps {
+  onSubmit: React.FormEventHandler<HTMLFormElement>;
+  children: React.ReactNode;
+  className?: string;
+}
+
+const Form: React.FC<FormProps> = ({ onSubmit, children, className = "" }) => {
   return (
     <form
       onSubmit={onSubmit}
