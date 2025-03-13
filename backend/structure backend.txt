@@ -1,0 +1,25 @@
+
+
+
+.env
+package.json
+
+
+src/
+├── server.js
+│
+│
+├── config/
+│   ├── UserComponent.jsx
+│   └── AdminComponent.jsx
+├── models/
+│   └── userModel.js
+├── controllers/
+│   ├── userController.js
+│   └── productController.js
+        categoryController.js
+├── routes/
+    └── apiRoutes.js
+        authRoutes.js
+        categoryRoutes.js
+        productRoutes.js
