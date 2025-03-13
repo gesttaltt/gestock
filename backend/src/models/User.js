@@ -1,7 +1,7 @@
 // File: /backend/src/models/User.js
 
 import mongoose from "mongoose";
-import bcrypt from "bcryptjs"; // keep for verifying bcrypt-hashed passwords
+import bcrypt from "bcrypt"; // keep for verifying bcrypt-hashed passwords
 import dotenv from "dotenv";
 import { hashPassword } from "../utils/passwordHasher.js";
 
