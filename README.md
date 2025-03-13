@@ -38,17 +38,3 @@ GeStock is a comprehensive solution designed to streamline inventory control, da
   - Extended reporting for sales and analytics.
 
 ---
-
-## Installation
-
-### Prerequisites
-- **Node.js** (v14.x or later recommended)
-- **npm** or **yarn** package manager
-- **MongoDB** Atlas or local MongoDB instance (if using the backend)
-
-### Steps
-
-1. **Clone the Repository:**
-   ```bash
-   git clone https://github.com/gesttaltt/gestock.git
-   cd gestock
