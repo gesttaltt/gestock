@@ -21,12 +21,12 @@
 
 /* Introductory section with a dynamic button */
 .landing-intro {
-  text-align: center;
-  align-items: center; /* Center children horizontally */
-  justify-content: center; /* Optional: Center children vertically */
-  margin: 2rem 0;
   display: flex;
   flex-direction: column;
+  align-items: center; /* Centers children horizontally in column layout */
+  justify-content: center; /* Optional: centers children vertically */
+  text-align: center;
+  margin: 2rem 0;
 }
 
 .landing-intro p {
@@ -43,8 +43,7 @@
 .landing-action-button {
   display: inline-block;
   font-size: 1.2rem;
-  margin-bottom: 1rem;
-  margin-top: 1rem;
+  margin: 1rem 0;
   padding: 0.8rem 1.2rem;
   border: none;
   border-radius: 3rem;
@@ -72,10 +71,11 @@
   margin-bottom: 1.5rem;
 }
 
-
+/* Responsive grid for features */
 .features-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  /* auto-fit tries to fill each row with as many columns as possible */
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 2rem;
 }
 
@@ -94,11 +94,47 @@
   transform: scale(1.05);
 }
 
+/* Icon styling */
 .feature-icon {
-  color: #fff;
+  fill: #fff; /* Ensure your SVG uses fill="currentColor" internally */
   width: 64px;
   height: 64px;
-  margin: 0 auto 0.5rem auto;
+  margin: 0 auto 0.5rem;
   display: block;
 }
 
+/* 
+  MEDIA QUERIES
+  Adjust breakpoints, font sizes, and spacing as needed 
+  for smaller screens or tighter iframes.
+*/
+@media (max-width: 768px) {
+  .landing-header {
+    font-size: 1.5rem;
+  }
+
+  .landing-intro p {
+    font-size: 1rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .landing-action-button {
+    font-size: 1rem;
+    padding: 0.6rem 1rem;
+  }
+
+  .landing-features h2 {
+    font-size: 1.4rem;
+    margin-bottom: 1rem;
+  }
+
+  .features-grid {
+    /* On smaller screens, cards can stack or reduce gap */
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+  }
+
+  .feature-item {
+    padding: 1rem;
+  }
+}
