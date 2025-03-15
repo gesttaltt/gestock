@@ -9,7 +9,7 @@ import {
   updateProduct,
   deleteProduct,
 } from "../api/productApi";
-import { fetchCategories } from "../api/categoryApi"; // Obtiene categorías reales
+import { fetchCategories } from "../api/categoryApi";
 import Card from "../components/ui/Card";
 import Loader from "../components/ui/Loader";
 import Alert from "../components/ui/Alert";
@@ -117,8 +117,8 @@ const Products: React.FC = () => {
       !editProduct ||
       !editProduct.name ||
       !editProduct.category ||
-      !editProduct.price ||
-      !editProduct.stock
+      editProduct.price === undefined ||
+      editProduct.stock === undefined
     ) {
       setError("Todos los campos son obligatorios");
       return;
@@ -184,7 +184,9 @@ const Products: React.FC = () => {
           >
             <div className="flex justify-between mt-2">
               <Button onClick={() => handleEditClick(product)}>Editar</Button>
-              <Button onClick={() => handleDelete(product._id)}>Eliminar</Button>
+              <Button onClick={() => handleDelete(product._id)}>
+                Eliminar
+              </Button>
             </div>
           </Card>
         ))}
@@ -283,7 +285,7 @@ const Products: React.FC = () => {
               placeholder="Precio"
               value={String(editProduct.price)}
               onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                setEditProduct({ ...editProduct, price: e.target.value })
+                setEditProduct({ ...editProduct, price: Number(e.target.value) })
               }
               name="editProductPrice"
             />
@@ -292,7 +294,7 @@ const Products: React.FC = () => {
               placeholder="Stock"
               value={String(editProduct.stock)}
               onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                setEditProduct({ ...editProduct, stock: e.target.value })
+                setEditProduct({ ...editProduct, stock: Number(e.target.value) })
               }
               name="editProductStock"
             />

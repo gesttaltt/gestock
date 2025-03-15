@@ -1,4 +1,7 @@
-import { useEffect, useState } from "react";
+/*
+ Profile.tsx
+*/
+import React, { useEffect, useState } from "react";
 import ProfileHeader from "./ProfileHeader";
 import { getProfile, updateProfile } from "../api/authApi";
 import Loader from "../components/ui/Loader";
@@ -40,11 +43,11 @@ const Profile: React.FC = () => {
         const data = await getProfile();
         if (data) {
           setProfile(data);
-          setEditData({ name: data.name, email: data.email, password: "" });
+          setEditData({ name: data.name || "", email: data.email || "", password: "" });
         } else {
           throw new Error("No se pudo cargar el perfil");
         }
-      } catch (err) {
+      } catch (err: any) {
         setError("Error al cargar el perfil");
       } finally {
         setLoading(false);
@@ -53,7 +56,7 @@ const Profile: React.FC = () => {
     loadProfile();
   }, []);
 
-  const handleEditSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleEditSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
     setError(null);
 
@@ -78,7 +81,7 @@ const Profile: React.FC = () => {
       } else {
         setError("Error al actualizar el perfil");
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error("Error al actualizar perfil:", err);
       setError("Error al actualizar el perfil");
     }

@@ -6,7 +6,7 @@ import React from "react";
 interface ButtonProps {
   onClick?: () => void;
   children: React.ReactNode;
-  type?: string; // Allow any string value for button type
+  type?: "button" | "reset" | "submit";
   className?: string;
   disabled?: boolean;
 }
