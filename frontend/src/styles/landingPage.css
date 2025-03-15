@@ -8,6 +8,11 @@
   padding: 2rem;
   background-color: var(--primary-light);
   color: var(--text-dark);
+
+    /* Placeholder background image */
+  background: url("../assets/backgrounds/landing-bg.svg") no-repeat;
+  background-position: top;
+  background-size: cover; /* Ensures the image covers the entire header */
 }
 
 /* Big header style */
@@ -17,6 +22,8 @@
   margin-top: 3rem;
   margin-bottom: 1rem;
   text-align: center;
+
+
 }
 
 /* Introductory section with a dynamic button */
