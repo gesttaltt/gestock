@@ -137,7 +137,7 @@ const Profile: React.FC = () => {
             type="password"
             name="password"
             placeholder="Nueva contraseña (opcional)"
-            value={editData.password}
+            value={editData.password || ""}
             onChange={(e) =>
               setEditData({ ...editData, password: e.target.value })
             }
