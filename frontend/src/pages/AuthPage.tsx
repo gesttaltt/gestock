@@ -9,7 +9,7 @@ import Loader from "../components/ui/Loader";
 import Form from "../components/ui/Form";
 import Input from "../components/ui/Input";
 import Button from "../components/ui/Button";
-import "../styles/AuthPage.css"; // Importa los estilos específicos para AuthPage
+import "../styles/authPage.css"; // Importa los estilos específicos para AuthPage
 
 const AuthPage: React.FC = () => {
   const [isLogin, setIsLogin] = useState<boolean>(true);
