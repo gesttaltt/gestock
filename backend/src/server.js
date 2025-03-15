@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import mongoose from "mongoose";
 import apiRoutes from "./routes/apiRoutes.js";
+import authMiddleware from "./middleware/authMiddleware.js";
 
 dotenv.config();
 
@@ -18,8 +19,8 @@ if (!process.env.JWT_SECRET) {
 
 const app = express();
 const PORT = process.env.PORT || 5000;
-// Use production frontend URL as default if CLIENT_URL isn't set
-const CLIENT_URL = process.env.CLIENT_URL || "https://gestock-orpin.vercel.app";
+// Normalize the CLIENT_URL (remove trailing slash) to ensure CORS matches exactly
+const CLIENT_URL = (process.env.CLIENT_URL || "https://gestock-orpin.vercel.app").replace(/\/$/, "");
 const mongoURI = process.env.MONGO_URI || "mongodb://127.0.0.1:27017/gestockDB";
 
 // Middleware to parse JSON
@@ -31,10 +32,20 @@ app.use((req, res, next) => {
   next();
 });
 
-// Secure CORS configuration
+// Secure CORS configuration with origin normalization
 app.use(
   cors({
-    origin: CLIENT_URL,
+    origin: (origin, callback) => {
+      // Allow requests with no origin (like mobile apps, curl)
+      if (!origin) return callback(null, true);
+
+      // Normalize the incoming origin (remove trailing slash)
+      const normalizedOrigin = origin.replace(/\/$/, "");
+      if (normalizedOrigin === CLIENT_URL) {
+        return callback(null, true);
+      }
+      return callback(new Error(`Not allowed by CORS: ${origin}`));
+    },
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
@@ -53,6 +64,7 @@ const connectDB = async (retries = 5, delay = 5000) => {
       return;
     } catch (error) {
       console.error(`❌ MongoDB Connection Error: ${error.message}`);
+      console.error(error.stack);
       retries--;
       console.log(`Reintentando conexión... Intentos restantes: ${retries}`);
       await new Promise((res) => setTimeout(res, delay));
@@ -63,12 +75,22 @@ const connectDB = async (retries = 5, delay = 5000) => {
 };
 connectDB();
 
-// Global API routes
-app.use("/api", apiRoutes);
+// Use authMiddleware on protected routes, allowing public access to /api/auth endpoints
+app.use(
+  "/api",
+  (req, res, next) => {
+    if (req.path.startsWith("/auth")) {
+      return next();
+    }
+    return authMiddleware(req, res, next);
+  },
+  apiRoutes
+);
 
 // Global error handler middleware
 app.use((err, req, res, next) => {
   console.error("⚠️ Global Error Handler:", err.message);
+  console.error(err.stack);
   res.status(err.status || 500).json({ message: err.message || "Internal Server Error" });
 });
 
