@@ -10,7 +10,7 @@ import Modal from "../components/ui/Modal";
 import Button from "../components/ui/Button";
 import Form from "../components/ui/Form";
 import Input from "../components/ui/Input";
-import "../styles/profilePage.css";
+import "../styles/ProfilePage.css";
 
 // Define Profile Interface
 interface ProfileData {
