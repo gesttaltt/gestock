@@ -52,6 +52,19 @@ app.use(
   })
 );
 
+// Custom header middleware for iframe embedding (allow only your portfolio domain)
+app.use((req, res, next) => {
+  res.setHeader(
+    "Content-Security-Policy",
+    "frame-ancestors 'self' https://gesttaltt.github.io"
+  );
+  res.setHeader(
+    "X-Frame-Options",
+    "ALLOW-FROM https://gesttaltt.github.io"
+  );
+  next();
+});
+
 // Function to connect to MongoDB with retries
 const connectDB = async (retries = 5, delay = 5000) => {
   while (retries > 0) {
