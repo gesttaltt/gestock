@@ -1,6 +1,3 @@
-/*
- src/api/authApi.ts
-*/
 import axiosInstance from "./axiosInstance";
 
 /**
@@ -68,7 +65,7 @@ export const updateProfile = async (updatedData: any): Promise<any | null> => {
 };
 
 /**
- * Obtiene los datos del dashboard (requiere autenticación y permisos de admin).
+ * Obtiene los datos del dashboard.
  */
 export const getDashboardData = async (): Promise<any | null> => {
   try {

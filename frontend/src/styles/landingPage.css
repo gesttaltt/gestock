@@ -1,0 +1,104 @@
+/* landingPage.css */
+
+/* Container for the whole landing page */
+.landing-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+  background-color: var(--primary-light);
+  color: var(--text-dark);
+}
+
+/* Big header style */
+.landing-header {
+  font-size: 1rem;
+  font-weight: bold;
+  margin-top: 3rem;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+/* Introductory section with a dynamic button */
+.landing-intro {
+  text-align: center;
+  align-items: center; /* Center children horizontally */
+  justify-content: center; /* Optional: Center children vertically */
+  margin: 2rem 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.landing-intro p {
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+}
+
+.landing-intro button {
+  width: auto;
+  justify-content: center;
+}
+
+/* Style for the main action button */
+.landing-action-button {
+  display: inline-block;
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+  margin-top: 1rem;
+  padding: 0.8rem 1.2rem;
+  border: none;
+  border-radius: 3rem;
+  background-color: var(--primary-dark);
+  color: var(--text-light);
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.landing-action-button:hover {
+  background-color: var(--primary-darker);
+  transform: scale(1.05);
+}
+
+/* Features section */
+.landing-features {
+  width: 100%;
+  max-width: 1200px;
+  padding: 1rem;
+}
+
+.landing-features h2 {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+}
+
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 2rem;
+}
+
+/* Individual feature item style */
+.feature-item {
+  background-color: var(--primary-dark);
+  color: var(--text-light);
+  padding: 1.5rem;
+  border-radius: 22px;
+  text-align: center;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.feature-item:hover {
+  background-color: var(--primary-darker);
+  transform: scale(1.05);
+}
+
+.feature-icon {
+  color: #fff;
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 0.5rem auto;
+  display: block;
+}
+

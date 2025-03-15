@@ -1,6 +1,3 @@
-/*
- App.tsx
-*/
 import React, { Suspense, lazy } from "react";
 import { Route, Routes, Navigate } from "react-router-dom";
 import Layout from "./layout/Layout";
@@ -9,6 +6,7 @@ import Loader from "./components/ui/Loader";
 import { AuthProvider } from "./contexts/AuthContext";
 
 // Lazy load pages from the pages folder
+const LandingPage = lazy(() => import("./pages/LandingPage"));
 const AuthPage = lazy(() => import("./pages/AuthPage"));
 const Products = lazy(() => import("./pages/Products"));
 const Categories = lazy(() => import("./pages/Categories"));
@@ -21,7 +19,8 @@ const App: React.FC = () => {
       <Layout>
         <Suspense fallback={<Loader />}>
           <Routes>
-            <Route path="/" element={<Dashboard />} />
+            <Route path="/" element={<LandingPage />} />
+            <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/auth" element={<AuthPage />} />
             <Route path="/products" element={<Products />} />
             <Route path="/categories" element={<Categories />} />

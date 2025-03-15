@@ -1,9 +1,6 @@
 /* index.css */
-
-/* Importar la fuente Roboto desde Google Fonts */
 @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
 
-/* Variables de color para una paleta fría, minimalista y moderna */
 :root {
   --primary-dark: #2d3748;      /* Fondo oscuro */
   --primary-darker: #1f2937;    /* Tonos más profundos */
