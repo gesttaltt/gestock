@@ -1,9 +1,10 @@
 // File: /backend/src/models/User.js
 
 import mongoose from "mongoose";
-import bcrypt from "bcrypt"; // keep for verifying bcrypt-hashed passwords
+import bcrypt from "bcrypt"; // for verifying bcrypt-hashed passwords
 import dotenv from "dotenv";
 import { hashPassword } from "../utils/passwordHasher.js";
+import crypto from "crypto"; // ESM import for crypto
 
 dotenv.config();
 
@@ -30,7 +31,7 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: [true, "La contraseña es obligatoria"],
       minlength: [6, "La contraseña debe tener al menos 6 caracteres"],
-      select: false, // no se retorna por defecto en las consultas para mayor seguridad
+      select: false, // do not return by default for security
     },
     role: {
       type: String,
@@ -41,7 +42,7 @@ const userSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// Excluir la contraseña al convertir a JSON
+// Exclude the password when converting to JSON
 userSchema.set("toJSON", {
   transform: function (doc, ret) {
     delete ret.password;
@@ -49,7 +50,7 @@ userSchema.set("toJSON", {
   },
 });
 
-// Pre-save hook para hashear la contraseña si es nueva o ha sido modificada
+// Pre-save hook to hash the password if it's new or modified
 userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
 
@@ -62,21 +63,21 @@ userSchema.pre("save", async function (next) {
   }
 });
 
-// Método para comparar la contraseña ingresada con la almacenada
+// Method to compare an entered password with the stored password hash
 userSchema.methods.comparePassword = async function (enteredPassword) {
-  // Si el hash comienza con "$argon2", es Argon2id
+  // If the stored hash starts with "$argon2", assume it's Argon2id
   if (this.password.startsWith("$argon2")) {
-    const argon2 = require("argon2");
-    return argon2.verify(this.password, enteredPassword);
+    const argon2Module = await import("argon2");
+    return argon2Module.default.verify(this.password, enteredPassword);
   }
-  // Si el hash contiene ":", asumimos scrypt (almacenado como "salt:derivedKey")
+  // If the stored hash contains ":", assume it's scrypt (stored as "salt:derivedKey")
   if (this.password.includes(":")) {
     const [saltHex, keyHex] = this.password.split(":");
     const salt = Buffer.from(saltHex, "hex");
     const keyLength = Buffer.from(keyHex, "hex").length;
 
     return new Promise((resolve, reject) => {
-      require("crypto").scrypt(
+      crypto.scrypt(
         enteredPassword,
         salt,
         keyLength,
@@ -88,7 +89,7 @@ userSchema.methods.comparePassword = async function (enteredPassword) {
       );
     });
   }
-  // De lo contrario, asumimos que es bcrypt
+  // Otherwise, assume it's bcrypt
   return bcrypt.compare(enteredPassword, this.password);
 };
 
