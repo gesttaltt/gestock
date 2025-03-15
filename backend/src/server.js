@@ -6,7 +6,7 @@ import apiRoutes from "./routes/apiRoutes.js";
 
 dotenv.config();
 
-// Verificar variables de entorno necesarias
+// Verify necessary environment variables
 if (!process.env.MONGO_URI) {
   console.error("❌ ERROR: La variable MONGO_URI no está definida en el archivo .env");
   process.exit(1);
@@ -18,19 +18,20 @@ if (!process.env.JWT_SECRET) {
 
 const app = express();
 const PORT = process.env.PORT || 5000;
-const CLIENT_URL = process.env.CLIENT_URL || "http://localhost:5173";
+// Use production frontend URL as default if CLIENT_URL isn't set
+const CLIENT_URL = process.env.CLIENT_URL || "https://gestock-orpin.vercel.app";
 const mongoURI = process.env.MONGO_URI || "mongodb://127.0.0.1:27017/gestockDB";
 
-// Middleware para parsear JSON
+// Middleware to parse JSON
 app.use(express.json());
 
-// Middleware de logs para debugging
+// Logging middleware for debugging
 app.use((req, res, next) => {
   console.log(`[DEBUG] ${req.method} request to ${req.url} - Body:`, req.body);
   next();
 });
 
-// Configuración de CORS segura
+// Secure CORS configuration
 app.use(
   cors({
     origin: CLIENT_URL,
@@ -40,14 +41,13 @@ app.use(
   })
 );
 
-// Función para conectar a MongoDB con reintentos
+// Function to connect to MongoDB with retries
 const connectDB = async (retries = 5, delay = 5000) => {
   while (retries > 0) {
     try {
       await mongoose.connect(mongoURI, {
-        serverSelectionTimeoutMS: 5000,
-        socketTimeoutMS: 45000,
-        maxPoolSize: 10,
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
       });
       console.log("✅ MongoDB Connected Successfully");
       return;
@@ -63,16 +63,16 @@ const connectDB = async (retries = 5, delay = 5000) => {
 };
 connectDB();
 
-// Rutas principales: la ruta global para la API ya está configurada aquí
+// Global API routes
 app.use("/api", apiRoutes);
 
-// Middleware de manejo global de errores
+// Global error handler middleware
 app.use((err, req, res, next) => {
   console.error("⚠️ Global Error Handler:", err.message);
   res.status(err.status || 500).json({ message: err.message || "Internal Server Error" });
 });
 
-// Iniciar servidor
+// Start the server
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT} - Accessible at ${CLIENT_URL}`);
 });
