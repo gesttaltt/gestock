@@ -1,0 +1,58 @@
+/* profilePage.css */
+
+/* Contenedor principal de la página de perfil */
+.profile-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  background-color: var(--primary-dark);
+  padding: 1rem;
+  border-radius: 10px;
+}
+
+/* Encabezado del perfil (se asume que ProfileHeader ya tiene su propio estilo, si no se puede definir aquí) */
+.profile-header {
+  text-align: center;
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+  color: var(--text-light);
+}
+
+.profile-container h2 {
+  color: #ffff;
+  margin-bottom: 1.5rem;
+}
+
+/* Área de información del perfil */
+.profile-info {
+  width: 100%;
+  max-width: 600px;
+  background-color: var(--primary-darker);
+  padding: 1rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  margin-bottom: 1.5rem;
+}
+
+.profile-info p {
+  margin-bottom: 0.5rem;
+  font-size: 1.1rem;
+  color: var(--text-light);
+}
+
+/* Botón de edición (se puede reutilizar estilos globales, pero aquí se define si se requiere) */
+.edit-button {
+  background-color: var(--accent-blue);
+  color: var(--text-light);
+  border: none;
+  padding: 0.6em 1.2em;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.25s;
+}
+
+.edit-button:hover {
+  background-color: var(--hover-dark);
+}
