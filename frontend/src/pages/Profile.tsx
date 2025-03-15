@@ -43,6 +43,7 @@ const Profile: React.FC = () => {
         const data = await getProfile();
         if (data) {
           setProfile(data);
+          // Ensure name and email are never undefined by providing fallback empty strings.
           setEditData({ name: data.name || "", email: data.email || "", password: "" });
         } else {
           throw new Error("No se pudo cargar el perfil");
