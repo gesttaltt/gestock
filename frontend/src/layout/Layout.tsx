@@ -15,87 +15,76 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const [cuentaOpen, setCuentaOpen] = useState<boolean>(false);
 
   return (
-    <div className="flex h-screen">
-      <nav className="w-64 bg-gray-800 text-white p-4">
-        <h1 className="text-xl font-bold">Gestock</h1>
-        <ul className="nav-list mt-4">
-          <li>
-            <Link to="/" className="dashboard-link">
-              <img src="/gestock-favicon.svg" alt="Gestock Logo" />
-              <span className="text-sm font-medium">Dashboard</span>
+    <div className="layout-container">
+      <nav className="layout-nav">
+        <h1 className="layout-nav-heading">Gestock</h1>
+        <ul className="layout-nav-list">
+          <li className="layout-nav-item">
+            <Link to="/" className="layout-dashboard-link">
+              <img
+                src="/gestock-favicon.svg"
+                alt="Gestock Logo"
+                className="layout-dashboard-img"
+              />
+              <span className="layout-dashboard-text">Dashboard</span>
             </Link>
           </li>
-          <li>
+          <li className="layout-nav-item">
             <button
               onClick={() => setInventarioOpen(!inventarioOpen)}
-              className="w-full text-left block p-2 hover:bg-gray-700 rounded focus:outline-none"
+              className="layout-nav-button"
             >
-              Inventario
+              Inventory
             </button>
             {inventarioOpen && (
-              <ul className="mt-2 ml-4 space-y-1">
-                <li>
-                  <Link
-                    to="/products"
-                    className="block p-2 hover:bg-gray-700 rounded"
-                  >
-                    Productos
+              <ul className="layout-sub-nav-list">
+                <li className="layout-sub-nav-item">
+                  <Link to="/products" className="layout-nav-link">
+                    Products
                   </Link>
                 </li>
-                <li>
-                  <Link
-                    to="/categories"
-                    className="block p-2 hover:bg-gray-700 rounded"
-                  >
-                    Categorías
+                <li className="layout-sub-nav-item">
+                  <Link to="/categories" className="layout-nav-link">
+                    Categories
                   </Link>
                 </li>
               </ul>
             )}
           </li>
-          <li>
+          <li className="layout-nav-item">
             <button
               onClick={() => setClientesOpen(!clientesOpen)}
-              className="w-full text-left block p-2 hover:bg-gray-700 rounded focus:outline-none"
+              className="layout-nav-button"
             >
-              Clientes
+              Customers
             </button>
             {clientesOpen && (
-              <ul className="mt-2 ml-4 space-y-1">
-                <li>
-                  <Link
-                    to="/clientes"
-                    className="block p-2 hover:bg-gray-700 rounded"
-                  >
-                    Gestión de Clientes
+              <ul className="layout-sub-nav-list">
+                <li className="layout-sub-nav-item">
+                  <Link to="/clientes" className="layout-nav-link">
+                    Customers Management
                   </Link>
                 </li>
               </ul>
             )}
           </li>
-          <li>
+          <li className="layout-nav-item">
             <button
               onClick={() => setCuentaOpen(!cuentaOpen)}
-              className="w-full text-left block p-2 hover:bg-gray-700 rounded focus:outline-none"
+              className="layout-nav-button"
             >
-              Cuenta
+              Account settings
             </button>
             {cuentaOpen && (
-              <ul className="mt-2 ml-4 space-y-1">
-                <li>
-                  <Link
-                    to="/profile"
-                    className="block p-2 hover:bg-gray-700 rounded"
-                  >
-                    Perfil
+              <ul className="layout-sub-nav-list">
+                <li className="layout-sub-nav-item">
+                  <Link to="/profile" className="layout-nav-link">
+                    Profile
                   </Link>
                 </li>
-                <li>
-                  <Link
-                    to="/auth"
-                    className="block p-2 hover:bg-gray-700 rounded"
-                  >
-                    Iniciar Sesión / Registro
+                <li className="layout-sub-nav-item">
+                  <Link to="/auth" className="layout-nav-link">
+                    Log In / Register
                   </Link>
                 </li>
               </ul>
@@ -103,7 +92,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           </li>
         </ul>
       </nav>
-      <main className="flex-1 p-6 bg-gray-100">{children}</main>
+      <main className="layout-main">{children}</main>
     </div>
   );
 };

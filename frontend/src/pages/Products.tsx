@@ -72,7 +72,7 @@ const Products: React.FC = () => {
   ): Promise<void> => {
     e.preventDefault();
     setError(null);
-    // Validación simple: chequea que ningún campo esté vacío
+    //Simple validation
     if (
       !newProduct.name ||
       !newProduct.category ||
@@ -83,7 +83,7 @@ const Products: React.FC = () => {
       return;
     }
     try {
-      // Convertir price y stock a números
+      // Stock and Price number conversion
       const productToCreate = {
         ...newProduct,
         price: Number(newProduct.price),

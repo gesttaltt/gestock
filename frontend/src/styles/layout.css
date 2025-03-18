@@ -21,6 +21,18 @@
   box-sizing: border-box;
 }
 
+/* Evitar scroll horizontal en cualquier caso */
+html,
+body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+/* Smooth scroll para animaciones de desplazamiento */
+html {
+  scroll-behavior: smooth;
+}
+
 /* Estilo global del body */
 body {
   font-family: 'Roboto', sans-serif;
@@ -28,90 +40,221 @@ body {
   color: var(--text-dark);
 }
 
-/* Contenedor principal */
-.flex {
+/* Layout Container (equivalente a .flex y .h-screen) */
+.layout-container {
   display: flex;
-}
-
-.h-screen {
   height: 100vh;
 }
 
-/* Custom styling for the dashboard link */
-
-.dashboard-link {
-  display: flex;
-  flex-direction: column;
-  align-items: center; /* Ensures both image and text are centered horizontally */
-  text-align: center;  /* Centers inline text content as well */
+/* Minimalistic scroll animation effects */
+[data-scroll] {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
 }
 
-.dashboard-link img {
-  width: 8vw;
-  height: 8vh;
+[data-scroll].active {
+  opacity: 1;
+  transform: translateY(0);
 }
 
-.dashboard-link:hover {
-  border-left: none !important; /* Remove the left border */
-  transform: scale(1.1);          /* Scale both the image and text */
-  background-color: var(--primary-darker); /* Optional: custom background */
-}
-
-.nav-list {
-  text-align: center;
-  margin-top: 3rem;
-}
-
-/* Estilos para la barra lateral (nav) */
-nav {
+/* Layout Navigation - Desktop */
+.layout-nav {
   width: 16rem; /* w-64 */
   background-color: var(--primary-dark);
   color: var(--text-light);
   padding: 1rem; /* p-4 */
-  border-radius: 10px;
+  border-radius: 20px;
   margin: 1rem;
 }
 
-nav h1 {
+.layout-nav-heading {
   font-size: 2.3rem; /* text-xl */
   font-weight: bold;
 }
 
-nav ul {
-  margin-top: 0.5rem;
+/* Navigation list */
+.layout-nav-list {
   list-style: none;
 }
 
-nav ul li {
+/* Navigation list item */
+.layout-nav-item {
   margin-top: 0.5rem;
 }
 
-nav ul li a {
-  display: block;
-  padding: 0.5rem;
-  border-radius: 0.25rem;
+/* Dashboard Link styling */
+.layout-dashboard-link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  color: var(--text-light);
+  margin-bottom: 1.5rem;
+}
+
+.layout-dashboard-link img {
+  width: 10vw;
+  height: 10vh;
+}
+
+.layout-dashboard-link:hover {
+  transform: scale(1.05);
+  background-color: var(--hover-dark);
+  color: var(--text-dark);
+}
+
+/* Navigation button styling (for Inventory, Customers, Account settings) */
+.layout-nav-button {
+  display: flex;             
+  align-items: center;
+  justify-content: center;
+  background-color: var(--primary-darker);
+  color: var(--text-light);
+  padding: 0.7rem;           /* Tailwind p-2 equivalent */
+  border-radius: 20px;       /* Rounded corners */
+  transition: background-color 0.3s ease, outline 0.3s ease, transform 0.3s ease;
+  cursor: pointer;
+  margin: 1rem auto;
+}
+
+.layout-nav-button:hover {
+  background-color: var(--hover-dark);
+  transform: scale(1.05);
+  outline: #ffff;
+}
+
+/* Focus effect for accessibility */
+.layout-nav-button:focus {
+  box-shadow: 0 0 0 2px var(--accent-blue);
+}
+
+/* Sub-navigation list */
+.layout-sub-nav-list {
+  text-align: center;
+  align-items: center;
+  margin-top: 1rem;
+  list-style: none;
+  padding: 0;
+}
+
+.layout-sub-nav-item {
+  margin-top: 0.5rem;
+}
+
+/* Navigation link styling */
+.layout-nav-link {
+  display: inline-flex; /* Inline-flex to shrink-wrap the text */
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  margin: 1rem;
   text-decoration: none;
   color: var(--text-light);
-  /* Agregamos una transición que incluya el borde lateral y el fondo */
-  transition: border-left 0.3s ease, background-color 0.3s ease, transform 0.3s ease;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  text-align: center;
 }
 
-/* Destacado lateral y fondo más oscuro en hover */
-nav ul li a:hover {
-  border-left: 3px solid var(--accent-blue);
-  color: var(--text-light);
-  background-color: var(--primary-darker);
-  transform: scale(1.1);
+.layout-nav-link:hover {
+  background-color: var(--hover-dark);
+  transform: scale(1.05);
   cursor: pointer;
+  color: var(--accent-blue);
 }
 
-/* Estilos para el contenido principal */
-main {
+/* Layout Main Content */
+.layout-main {
   flex: 1;
-  padding: 1.5rem; /* p-6 */
+  padding: 1.5rem;
   background-color: var(--primary-light);
 }
 
+/* Iframe responsiveness: contenedor para iframes en relación 16:9 */
+.responsive-iframe {
+  position: relative;
+  width: 100%;
+  height: 0;
+  padding-bottom: 56.25%; /* 16:9 aspect ratio */
+  margin: 1rem 0;
+}
+
+.responsive-iframe iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+/* General button styling */
 button {
   margin: 0.5rem;
+}
+
+/* Tablet/Mobile adjustments: horizontal navbar on top, no horizontal scroll */
+@media only screen and (max-width: 1024px) {
+  .layout-container {
+    display: block;
+    height: auto;
+  }
+
+  /* Ajusta el body para compensar el navbar fijo */
+  body {
+    padding-top: 60px; /* Ajusta este valor según la altura real del navbar */
+  }
+
+  .layout-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    margin: 0;
+    border-radius: 0;
+    padding: 0.5rem;
+    display: flex;
+    flex-wrap: wrap;  /* Allow items to wrap onto new lines if needed */
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+
+  .layout-nav-heading {
+    flex: 0 0 100%;
+    font-size: 1.2rem;
+    text-align: center;
+    margin-bottom: 0.25rem;
+  }
+
+  .layout-nav-heading h1 {
+    font-size: 1.8rem;
+  }
+
+  .layout-nav-list {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;  /* Wrap nav items to avoid horizontal scrolling */
+    gap: 0.3rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .layout-nav-link {
+    font-size: 0.9rem;
+    padding: 0.5rem 1rem;
+  }
+
+  .layout-dashboard-link img {
+    width: 8vw;
+    height: auto;
+  }
+
+  .layout-main {
+    padding: 1rem;
+  }
 }
