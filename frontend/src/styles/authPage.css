@@ -23,7 +23,7 @@
   display: flex;
   height: 4vh;
   width: 30vh;
-  border-radius: 7px;
+  border-radius: 20px;
   cursor: pointer;
   padding: 0.5rem;
 }
