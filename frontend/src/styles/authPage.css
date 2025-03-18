@@ -3,14 +3,13 @@
 /* Contenedor principal de la página de autenticación */
 .session-container {
   display: flex;
-  height: 100vh;
+  height: 95vh;
   width: auto;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   background-color: var(--primary-dark); /* Utiliza la variable global */
-  padding: 1rem;
-  border-radius: 10px;
+  border-radius: 20px;
 }
 
 .session-container form {
