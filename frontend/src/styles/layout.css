@@ -92,6 +92,7 @@ body {
   color: var(--text-light);
   margin-bottom: 2.5rem;
   margin-top: 2.5rem;
+  transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
 .layout-dashboard-link img {
@@ -101,8 +102,7 @@ body {
 
 .layout-dashboard-link:hover {
   transform: scale(1.05);
-  background-color: var(--hover-dark);
-  color: var(--text-dark);
+  color: var(--accent-blue);
 }
 
 /* Navigation button styling (for Inventory, Customers, Account settings) */
@@ -203,7 +203,7 @@ button {
 
   /* Ajusta el body para compensar el navbar fijo */
   body {
-    padding-top: 60px; /* Ajusta este valor según la altura real del navbar */
+    padding-top: 8em; /* Ajusta este valor según la altura real del navbar */
   }
 
   .layout-nav {
@@ -234,20 +234,20 @@ button {
   }
 
   .layout-nav-list {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;  /* Wrap nav items to avoid horizontal scrolling */
-    gap: 0.3rem;
+    display: grid !important; /* Override the existing 'flex' display */
+    grid-template-columns: repeat(4, 1fr);
+    align-items: center;
+    justify-items: center;
+    gap: 0.5rem;
     list-style: none;
     padding: 0;
     margin: 0;
-    justify-content: center;
     width: 100%;
   }
 
   .layout-nav-link {
     font-size: 0.9rem;
-    padding: 0.5rem 1rem;
+    padding: 0.5rem 0.5rem;
   }
 
   .layout-dashboard-link img {
@@ -256,6 +256,60 @@ button {
   }
 
   .layout-main {
-    padding: 1rem;
+    padding: 0.5rem;
+  }
+
+   /* 3) For the other 3 nav items, add placeholder icons above the text via pseudo-elements */
+
+  /* -- Inventory (2nd item) -- */
+  .layout-nav-item:nth-child(2) .layout-nav-button {
+    flex-direction: column; /* Stack icon (pseudo-element) above text */
+  }
+  .layout-nav-item:nth-child(2) .layout-nav-button::before {
+    content: "";
+    display: block;
+    width: 30px;
+    height: 30px;
+    /* Replace with your own placeholder icon path */
+    background: url("/path/to/inventory-placeholder.svg") no-repeat center / contain;
+    margin-bottom: 0.4rem;
+  }
+
+  /* -- Customers (3rd item) -- */
+  .layout-nav-item:nth-child(3) .layout-nav-button {
+    flex-direction: column;
+  }
+  .layout-nav-item:nth-child(3) .layout-nav-button::before {
+    content: "";
+    display: block;
+    width: 30px;
+    height: 30px;
+    /* Replace with your own placeholder icon path */
+    background: url("/path/to/customers-placeholder.svg") no-repeat center / contain;
+    margin-bottom: 0.4rem;
+  }
+
+  /* -- Account Settings (4th item) -- */
+  .layout-nav-item:nth-child(4) .layout-nav-button {
+    flex-direction: column;
+  }
+  .layout-nav-item:nth-child(4) .layout-nav-button::before {
+    content: "";
+    display: block;
+    width: 30px;
+    height: 30px;
+    /* Replace with your own placeholder icon path */
+    background: url("/path/to/account-placeholder.svg") no-repeat center / contain;
+    margin-bottom: 0.4rem;
+  }
+
+  /* 4) Optional: Tweak margins to tighten spacing */
+  .layout-nav-button {
+    margin: 0.5rem auto; /* Center the buttons in each grid cell */
+  }
+  .layout-nav-link {
+    margin: 0; /* Remove extra margin so they fit nicely in the grid */
   }
 }
+
+

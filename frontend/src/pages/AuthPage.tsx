@@ -69,7 +69,7 @@ const AuthPage: React.FC = () => {
   return (
     <div className="session-container">
       <h2 className="session-header">
-        {isLogin ? "Iniciar Sesión" : "Registro"}
+        {isLogin ? "Sign In" : "Register"}
       </h2>
       {error && <Alert message={error} type="error" />}
       {success && <Alert message={success} type="success" />}
@@ -78,7 +78,7 @@ const AuthPage: React.FC = () => {
         {!isLogin && (
           <Input
             type="text"
-            placeholder="Nombre"
+            placeholder="Name"
             value={name}
             onChange={(e) => setName(e.target.value)}
           />
@@ -91,18 +91,18 @@ const AuthPage: React.FC = () => {
         />
         <Input
           type="password"
-          placeholder="Contraseña"
+          placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
         <Button type="submit" className="w-full mt-4" disabled={loading}>
-          {isLogin ? "Ingresar" : "Registrarse"}
+          {isLogin ? "Login" : "Sign Up"}
         </Button>
       </Form>
       <div className="session-toggle">
         {isLogin ? (
           <p>
-            ¿No tienes cuenta?{" "}
+            Have an account already?{" "}
             <button
               className="toggle-button"
               onClick={() => {
@@ -111,12 +111,12 @@ const AuthPage: React.FC = () => {
                 setSuccess(null);
               }}
             >
-              Registrarse
+              Register
             </button>
           </p>
         ) : (
           <p>
-            ¿Ya tienes cuenta?{" "}
+            Already registered?{" "}
             <button
               className="toggle-button"
               onClick={() => {
@@ -125,7 +125,7 @@ const AuthPage: React.FC = () => {
                 setSuccess(null);
               }}
             >
-              Inicia sesión
+              Log In
             </button>
           </p>
         )}
