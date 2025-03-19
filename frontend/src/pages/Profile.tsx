@@ -45,7 +45,6 @@ const Profile: React.FC = () => {
         const data = await getProfile();
         if (data) {
           setProfile(data);
-          // Ensure name and email are never undefined by providing fallback empty strings.
           setEditData({
             name: data.name || "",
             email: data.email || "",
@@ -130,6 +129,7 @@ const Profile: React.FC = () => {
   return (
     <div className="profile-container">
       <ProfileHeader />
+      {successMessage && <Alert message={successMessage} type="success" />}
       <div className="profile-info">
         <p>
           <strong>Name:</strong> {profile?.name}
@@ -157,9 +157,7 @@ const Profile: React.FC = () => {
             name="name"
             placeholder="Name"
             value={editData.name}
-            onChange={(e) =>
-              setEditData({ ...editData, name: e.target.value })
-            }
+            onChange={(e) => setEditData({ ...editData, name: e.target.value })}
             autoFocus
           />
           <Input
@@ -167,18 +165,14 @@ const Profile: React.FC = () => {
             name="email"
             placeholder="Email"
             value={editData.email}
-            onChange={(e) =>
-              setEditData({ ...editData, email: e.target.value })
-            }
+            onChange={(e) => setEditData({ ...editData, email: e.target.value })}
           />
           <Input
             type="password"
             name="password"
             placeholder="New password (optional)"
             value={editData.password || ""}
-            onChange={(e) =>
-              setEditData({ ...editData, password: e.target.value })
-            }
+            onChange={(e) => setEditData({ ...editData, password: e.target.value })}
           />
           <div className="modal-actions">
             <Button type="button" onClick={handleCancelEdit} className="cancel-button">
