@@ -1,19 +1,19 @@
-/*
- AuthPage.tsx
-*/
-import React, { useState } from "react";
+// AuthPage.tsx
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { loginUser, registerUser } from "../api/authApi";
+import { registerUser } from "../api/authApi";
 import Alert from "../components/ui/Alert";
 import Loader from "../components/ui/Loader";
 import Form from "../components/ui/Form";
 import Input from "../components/ui/Input";
 import Button from "../components/ui/Button";
-import "../styles/authPage.css"; // Importa los estilos específicos para AuthPage
+import { useAuth } from "../contexts/AuthContext";
+import "../styles/authPage.css";
 
 const AuthPage: React.FC = () => {
+  const { login, user } = useAuth();
   const [isLogin, setIsLogin] = useState<boolean>(true);
-  const [name, setName] = useState<string>(""); // Solo para registro
+  const [name, setName] = useState<string>(""); // Only used for registration
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
@@ -22,21 +22,27 @@ const AuthPage: React.FC = () => {
 
   const navigate = useNavigate();
 
+  // If the user is already authenticated, redirect them to the dashboard
+  useEffect(() => {
+    if (user) {
+      navigate("/dashboard", { replace: true });
+    }
+  }, [user, navigate]);
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
     setError(null);
     setSuccess(null);
     setLoading(true);
 
-    // Eliminar espacios extras en email y nombre
+    // Trim email and name
     const trimmedEmail = email.trim();
     const trimmedName = name.trim();
 
     if (isLogin) {
-      // Proceso de inicio de sesión
-      const result = await loginUser({ email: trimmedEmail, password });
-      if (result && result.token) {
-        localStorage.setItem("token", result.token);
+      // Login process using AuthContext's login method
+      const result = await login({ email: trimmedEmail, password });
+      if (result) {
         setSuccess("Inicio de sesión exitoso. Redirigiendo...");
         setTimeout(() => {
           navigate("/dashboard");
@@ -45,7 +51,7 @@ const AuthPage: React.FC = () => {
         setError("Error al iniciar sesión. Verifica tus credenciales.");
       }
     } else {
-      // Proceso de registro
+      // Registration process
       if (!trimmedName) {
         setError("El nombre es obligatorio para registrarse.");
         setLoading(false);
@@ -55,7 +61,7 @@ const AuthPage: React.FC = () => {
       if (result && result.message === "Usuario registrado correctamente") {
         setSuccess("Registro exitoso. Ahora inicia sesión.");
         setIsLogin(true);
-        // Limpia los campos de registro
+        // Clear registration fields
         setName("");
         setEmail("");
         setPassword("");
@@ -68,9 +74,7 @@ const AuthPage: React.FC = () => {
 
   return (
     <div className="session-container">
-      <h2 className="session-header">
-        {isLogin ? "Sign In" : "Register"}
-      </h2>
+      <h2 className="session-header">{isLogin ? "Sign In" : "Register"}</h2>
       {error && <Alert message={error} type="error" />}
       {success && <Alert message={success} type="success" />}
       {loading && <Loader />}
@@ -102,7 +106,7 @@ const AuthPage: React.FC = () => {
       <div className="session-toggle">
         {isLogin ? (
           <p>
-            Have an account already?{" "}
+            Don't have an account?{" "}
             <button
               className="toggle-button"
               onClick={() => {
