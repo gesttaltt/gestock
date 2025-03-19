@@ -24,7 +24,7 @@
   }
 }
 
-/* Dashboard header (if needed) */
+/* Dashboard header */
 .dashboard-header {
   text-align: center;
   margin-bottom: 2rem;
@@ -39,18 +39,20 @@
   background-color: var(--primary-dark, #2d3748);
   color: var(--text-light, #fff);
   cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.3s ease;
-  margin-bottom: 1rem;
+  transition: background-color 0.3s ease, transform 0.3s ease, border 0.3s ease;
+  margin-bottom: 0.5rem;
+  text-align: center;
 }
 
 .refresh-button:hover {
   background-color: var(--primary-darker, #1a202c);
   transform: scale(1.05);
+  border: 2px solid #fff;
 }
 
 /* Section headings with slide-in animation */
 .section-heading {
-  font-size: 1.75rem;
+  font-size: 2rem;
   margin-bottom: 1rem;
   font-weight: bold;
   text-align: center;
@@ -68,23 +70,40 @@
   }
 }
 
-/* Container for the graphics section */
-.data-visualization {
+/* Unified Dashboard Content Grid: two columns for visual charts and summary cards */
+.dashboard-content-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2rem;
-  margin-top: 2rem;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-top: 1rem;
 }
 
-/* Chart container */
+/* Charts Grid: contains the multiple chart containers */
+.charts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+.dashboard-summary-visual {
+  margin-top: 1rem;
+}
+
+/* Summary Grid: contains the three summary cards */
+.dashboard-summary-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1rem;
+}
+
+/* Chart container with minimalistic styling */
 .chart-container {
   max-width: 500px;
-  margin: 0 auto;
-  margin-bottom: 1rem;
+  margin: 0 auto 0.5rem;
   background: var(--card-bg, rgba(0, 0, 0, 0.5));
-  padding: 1.5rem;
-  border-radius: 15px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 1rem;
+  border-radius: 20px;
+  box-shadow: none;
   transition: transform 0.3s ease;
 }
 
@@ -103,7 +122,46 @@
   width: 100%;
 }
 
-/* List styling (if needed) */
+/* Summary card styling */
+.dashboard-summary-item {
+  padding: 0.5rem;
+  border-radius: 20px;
+  background: var(--card-bg, rgba(0, 0, 0, 0.5));
+}
+
+.dashboard-summary-item p {
+  text-align: left;
+  margin-left: 0.5rem;
+}
+
+/* Summary card heading as h3 */
+.dashboard-summary-item h3 {
+  font-size: 1.2rem;
+  margin-bottom: 0.75rem;
+  font-weight: bold;
+  text-align: center;
+}
+
+/* Table styling for Top Products Table (if used) */
+.data-table {
+  margin-top: 1.5rem;
+  width: 100%;
+  overflow-x: auto;
+}
+
+.data-table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.data-table th,
+.data-table td {
+  padding: 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* List styling */
 ul {
   list-style-type: disc;
   margin-left: 2rem;
@@ -112,7 +170,7 @@ ul {
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
-  .data-visualization {
+  .dashboard-content-grid {
     grid-template-columns: 1fr;
   }
   .section-heading {

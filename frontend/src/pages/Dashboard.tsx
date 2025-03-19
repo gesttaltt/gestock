@@ -1,6 +1,3 @@
-/*
- Dashboard.tsx
-*/
 import React, { useEffect, useState } from "react";
 import DashboardHeader from "./DashboardHeader";
 import Loader from "../components/ui/Loader";
@@ -10,10 +7,12 @@ import { useAuth } from "../contexts/AuthContext";
 import "../styles/dashboardPage.css";
 
 // Importations for ChartJS
-import { Doughnut, Bar } from "react-chartjs-2";
+import { Doughnut, Bar, Line } from "react-chartjs-2";
 import {
   Chart as ChartJS,
   ArcElement,
+  LineElement,
+  PointElement,
   Tooltip,
   Legend,
   CategoryScale,
@@ -21,7 +20,16 @@ import {
   BarElement,
 } from "chart.js";
 import { fetchCategories } from "../api/categoryApi";
-ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement);
+ChartJS.register(
+  ArcElement,
+  LineElement,
+  PointElement,
+  Tooltip,
+  Legend,
+  CategoryScale,
+  LinearScale,
+  BarElement
+);
 
 // Interfaces for Dashboard and Category data
 interface DashboardData {
@@ -103,20 +111,25 @@ const Dashboard: React.FC = () => {
     ],
   };
 
+  // New: Configuration for the Line chart: Product Trend (dummy data)
+  const lineData = {
+    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+    datasets: [
+      {
+        label: "Product Trend",
+        data: [10, 15, 20, 18, 25, 30],
+        fill: false,
+        borderColor: "rgba(63, 179, 237, 1)",
+        tension: 0.1,
+      },
+    ],
+  };
+
   return (
     <div className="dashboard-container">
       <DashboardHeader />
       <div className="flex justify-end mb-4">
-        <button
-          onClick={() => {
-            setLoading(true);
-            setError("");
-            fetchDashboardData();
-          }}
-          className="refresh-button"
-        >
-          Refresh Data
-        </button>
+        {/* Refresh button is rendered at the bottom as well */}
       </div>
 
       {user && user.name && (
@@ -129,52 +142,90 @@ const Dashboard: React.FC = () => {
         <Alert message={error} type="error" />
       ) : (
         <>
-          <Alert message="Welcome to the Dashboard!" type="info" />
-          <section>
-            <h2 className="section-heading">General Data</h2>
-            <p>Total products: {data?.totalProducts}</p>
-            <p>Total categories: {data?.totalCategories}</p>
-          </section>
+          <Alert
+            message="In your dashboard page you can easily view your data & analytics, scroll down to see all the groups of information and their labels"
+            type="info"
+          />
 
-          {/* Data Visualization Section */}
-          <section className="data-visualization">
-            <div className="chart-container">
-              <h2 className="section-heading">Products vs. Categories</h2>
-              <Doughnut className="doughnut" data={doughnutData} />
+          {/* Data Visualizations Section */}
+          <div className="dashboard-summary-visual charts">
+            <div className="charts-grid">
+              <div className="chart-container">
+                <h3 className="section-heading">Products vs. Categories</h3>
+                <Doughnut className="doughnut" data={doughnutData} />
+              </div>
+              <div className="chart-container">
+                <h3 className="section-heading">Top 5 Products with Highest Stock</h3>
+                <Bar
+                  className="bar"
+                  data={barData}
+                  options={{
+                    responsive: true,
+                    plugins: { legend: { position: "top" } },
+                  }}
+                />
+              </div>
+              <div className="chart-container">
+                <h3 className="section-heading">Product Trend</h3>
+                <Line
+                  className="line-chart"
+                  data={lineData}
+                  options={{
+                    responsive: true,
+                    plugins: { legend: { position: "top" } },
+                  }}
+                />
+              </div>
             </div>
-            <div className="chart-container">
-              <h2 className="section-heading">Top 5 Products with Highest Stock</h2>
-              <Bar
-                className="bar"
-                data={barData}
-                options={{ responsive: true, plugins: { legend: { position: "top" } } }}
-              />
+          </div>
+
+          {/* Summary Grid Section */}
+          <div className="dashboard-summary-grid">
+            {/* General Data */}
+            <div className="dashboard-summary-item general-data">
+              <h3 className="section-heading">General Data</h3>
+              <p>Total products: {data?.totalProducts}</p>
+              <p>Total categories: {data?.totalCategories}</p>
             </div>
-          </section>
 
-          <section>
-            <h2 className="section-heading">Last 5 Added Products</h2>
-            <ul className="list-disc ml-6">
-              {data?.latestProducts.map((prod, idx) => (
-                <li key={idx}>{prod.name}</li>
-              ))}
-            </ul>
-          </section>
-
-          <section>
-            <h2 className="section-heading">All Categories</h2>
-            {allCategories.length > 0 ? (
+            {/* Last 5 Added Products */}
+            <div className="dashboard-summary-item recent-products">
+              <h3 className="section-heading">Last 5 Added Products</h3>
               <ul className="list-disc ml-6">
-                {allCategories.map((cat) => (
-                  <li key={cat._id}>
-                    <strong>{cat.name}</strong>: {cat.description || "No description available"}
-                  </li>
+                {data?.latestProducts.map((prod, idx) => (
+                  <li key={idx}>{prod.name}</li>
                 ))}
               </ul>
-            ) : (
-              <p>No categories available.</p>
-            )}
-          </section>
+            </div>
+
+            {/* All Categories */}
+            <div className="dashboard-summary-item all-categories">
+              <h3 className="section-heading">All Categories</h3>
+              {allCategories.length > 0 ? (
+                <ul className="list-disc ml-6">
+                  {allCategories.map((cat) => (
+                    <li key={cat._id}>
+                      <strong>{cat.name}</strong>:{" "}
+                      {cat.description || "No description available"}
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p>No categories available.</p>
+              )}
+            </div>
+          </div>
+
+          <button
+            onClick={() => {
+              setLoading(true);
+              setError("");
+              fetchDashboardData();
+            }}
+            className="refresh-button"
+          >
+            Refresh Data
+          </button>
         </>
       )}
     </div>
