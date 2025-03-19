@@ -52,7 +52,7 @@
 .landing-action-button {
   display: inline-block;
   font-size: 1.2rem;
-  margin: 1rem 0;
+  margin: 1rem 0 0;
   padding: 0.8rem 1.2rem;
   border: none;
   border-radius: 3rem;
@@ -71,20 +71,19 @@
 .landing-features {
   width: 100%;
   max-width: 1200px;
-  padding: 1rem;
+  padding: 0.7rem;
 }
 
 .landing-features h2 {
   text-align: center;
   font-size: 2rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.2rem;
 }
 
 /* Responsive grid for features */
 .features-grid {
   display: grid;
-  /* auto-fit tries to fill each row with as many columns as possible */
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
   gap: 2rem;
 }
 
