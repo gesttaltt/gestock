@@ -36,8 +36,6 @@ const Profile: React.FC = () => {
     email: "",
     password: "",
   });
-  const [submitting, setSubmitting] = useState<boolean>(false);
-  const [successMessage, setSuccessMessage] = useState<string>("");
 
   useEffect(() => {
     const loadProfile = async () => {
@@ -45,16 +43,13 @@ const Profile: React.FC = () => {
         const data = await getProfile();
         if (data) {
           setProfile(data);
-          setEditData({
-            name: data.name || "",
-            email: data.email || "",
-            password: "",
-          });
+          // Ensure name and email are never undefined by providing fallback empty strings.
+          setEditData({ name: data.name || "", email: data.email || "", password: "" });
         } else {
-          throw new Error("Could not load profile");
+          throw new Error("No se pudo cargar el perfil");
         }
       } catch (err: any) {
-        setError("Error loading profile");
+        setError("Error al cargar el perfil");
       } finally {
         setLoading(false);
       }
@@ -62,19 +57,15 @@ const Profile: React.FC = () => {
     loadProfile();
   }, []);
 
-  const handleEditSubmit = async (
-    e: React.FormEvent<HTMLFormElement>
-  ): Promise<void> => {
+  const handleEditSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
     setError(null);
-    setSuccessMessage("");
 
     if (!editData.name.trim() || !editData.email.trim()) {
-      setError("Name and email are required");
+      setError("El nombre y el email son obligatorios");
       return;
     }
 
-    setSubmitting(true);
     try {
       const updatedFields: EditProfileData = {
         name: editData.name.trim(),
@@ -87,40 +78,14 @@ const Profile: React.FC = () => {
       const updatedProfile = await updateProfile(updatedFields);
       if (updatedProfile) {
         setProfile(updatedProfile);
-        setSuccessMessage("Profile updated successfully");
-        // Reset editData to reflect the updated profile
-        setEditData({
-          name: updatedProfile.name || "",
-          email: updatedProfile.email || "",
-          password: "",
-        });
-        // Close the modal after a short delay to allow the user to see the success message
-        setTimeout(() => {
-          setIsEditModalOpen(false);
-          setSuccessMessage("");
-        }, 1500);
+        setIsEditModalOpen(false);
       } else {
-        setError("Error updating profile");
+        setError("Error al actualizar el perfil");
       }
     } catch (err: any) {
-      console.error("Error updating profile:", err);
-      setError("Error updating profile");
-    } finally {
-      setSubmitting(false);
+      console.error("Error al actualizar perfil:", err);
+      setError("Error al actualizar el perfil");
     }
-  };
-
-  // Handler to cancel editing and reset form data
-  const handleCancelEdit = () => {
-    if (profile) {
-      setEditData({
-        name: profile.name || "",
-        email: profile.email || "",
-        password: "",
-      });
-    }
-    setError(null);
-    setIsEditModalOpen(false);
   };
 
   if (loading) return <Loader />;
@@ -129,59 +94,58 @@ const Profile: React.FC = () => {
   return (
     <div className="profile-container">
       <ProfileHeader />
-      {successMessage && <Alert message={successMessage} type="success" />}
       <div className="profile-info">
         <p>
-          <strong>Name:</strong> {profile?.name}
+          <strong>Nombre:</strong> {profile?.name}
         </p>
         <p>
           <strong>Email:</strong> {profile?.email}
         </p>
         <p>
-          <strong>Role:</strong> {profile?.role}
+          <strong>Rol:</strong> {profile?.role}
         </p>
       </div>
       <Button onClick={() => setIsEditModalOpen(true)} className="edit-button">
-        Edit Profile
+        Editar Perfil
       </Button>
 
       {/* Modal for Editing Profile */}
       <Modal
         isOpen={isEditModalOpen}
         onClose={() => setIsEditModalOpen(false)}
-        title="Edit Profile"
+        title="Editar Perfil"
       >
         <Form onSubmit={handleEditSubmit}>
           <Input
             type="text"
             name="name"
-            placeholder="Name"
+            placeholder="Nombre"
             value={editData.name}
-            onChange={(e) => setEditData({ ...editData, name: e.target.value })}
-            autoFocus
+            onChange={(e) =>
+              setEditData({ ...editData, name: e.target.value })
+            }
           />
           <Input
             type="email"
             name="email"
             placeholder="Email"
             value={editData.email}
-            onChange={(e) => setEditData({ ...editData, email: e.target.value })}
+            onChange={(e) =>
+              setEditData({ ...editData, email: e.target.value })
+            }
           />
           <Input
             type="password"
             name="password"
-            placeholder="New password (optional)"
+            placeholder="Nueva contraseña (opcional)"
             value={editData.password || ""}
-            onChange={(e) => setEditData({ ...editData, password: e.target.value })}
+            onChange={(e) =>
+              setEditData({ ...editData, password: e.target.value })
+            }
           />
-          <div className="modal-actions">
-            <Button type="button" onClick={handleCancelEdit} className="cancel-button">
-              Cancel
-            </Button>
-            <Button type="submit" className="w-full mt-4" disabled={submitting}>
-              {submitting ? "Saving..." : "Save Changes"}
-            </Button>
-          </div>
+          <Button type="submit" className="w-full mt-4">
+            Guardar Cambios
+          </Button>
         </Form>
       </Modal>
     </div>
