@@ -224,14 +224,13 @@ button {
 
   .layout-nav-heading {
     flex: 0 0 100%;
-    font-size: 1.2rem;
     text-align: center;
-    margin-bottom: 0.25rem;
   }
 
   .layout-nav-heading h1 {
-    font-size: 1.8rem;
+    font-size: 1.2rem;
   }
+
 
   .layout-nav-list {
     display: grid !important; /* Override the existing 'flex' display */
@@ -247,7 +246,7 @@ button {
 
   .layout-nav-link {
     font-size: 0.9rem;
-    padding: 0.5rem 0.5rem;
+    padding: 0.2rem 0.2rem;
   }
 
   .layout-dashboard-link img {
@@ -271,7 +270,7 @@ button {
     width: 30px;
     height: 30px;
     /* Replace with your own placeholder icon path */
-    background: url("/path/to/inventory-placeholder.svg") no-repeat center / contain;
+    background: url("../assets/icons/stock.svg") no-repeat center / contain;
     margin-bottom: 0.4rem;
   }
 
@@ -285,7 +284,7 @@ button {
     width: 30px;
     height: 30px;
     /* Replace with your own placeholder icon path */
-    background: url("/path/to/customers-placeholder.svg") no-repeat center / contain;
+    background: url("../assets/icons/customers.svg") no-repeat center / contain;
     margin-bottom: 0.4rem;
   }
 
@@ -299,7 +298,7 @@ button {
     width: 30px;
     height: 30px;
     /* Replace with your own placeholder icon path */
-    background: url("/path/to/account-placeholder.svg") no-repeat center / contain;
+    background: url("../assets/icons/profile.svg") no-repeat center / contain;
     margin-bottom: 0.4rem;
   }
 
