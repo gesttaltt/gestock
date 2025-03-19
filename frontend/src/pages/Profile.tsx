@@ -45,6 +45,7 @@ const Profile: React.FC = () => {
         const data = await getProfile();
         if (data) {
           setProfile(data);
+          // Ensure name and email are never undefined by providing fallback empty strings.
           setEditData({
             name: data.name || "",
             email: data.email || "",
@@ -62,7 +63,9 @@ const Profile: React.FC = () => {
     loadProfile();
   }, []);
 
-  const handleEditSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
+  const handleEditSubmit = async (
+    e: React.FormEvent<HTMLFormElement>
+  ): Promise<void> => {
     e.preventDefault();
     setError(null);
     setSuccessMessage("");
@@ -122,12 +125,11 @@ const Profile: React.FC = () => {
   };
 
   if (loading) return <Loader />;
+  if (error) return <Alert message={error} type="error" />;
 
   return (
     <div className="profile-container">
       <ProfileHeader />
-      {error && <Alert message={error} type="error" />}
-      {successMessage && <Alert message={successMessage} type="success" />}
       <div className="profile-info">
         <p>
           <strong>Name:</strong> {profile?.name}
@@ -146,7 +148,7 @@ const Profile: React.FC = () => {
       {/* Modal for Editing Profile */}
       <Modal
         isOpen={isEditModalOpen}
-        onClose={handleCancelEdit}
+        onClose={() => setIsEditModalOpen(false)}
         title="Edit Profile"
       >
         <Form onSubmit={handleEditSubmit}>
@@ -155,7 +157,9 @@ const Profile: React.FC = () => {
             name="name"
             placeholder="Name"
             value={editData.name}
-            onChange={(e) => setEditData({ ...editData, name: e.target.value })}
+            onChange={(e) =>
+              setEditData({ ...editData, name: e.target.value })
+            }
             autoFocus
           />
           <Input
@@ -163,14 +167,18 @@ const Profile: React.FC = () => {
             name="email"
             placeholder="Email"
             value={editData.email}
-            onChange={(e) => setEditData({ ...editData, email: e.target.value })}
+            onChange={(e) =>
+              setEditData({ ...editData, email: e.target.value })
+            }
           />
           <Input
             type="password"
             name="password"
             placeholder="New password (optional)"
             value={editData.password || ""}
-            onChange={(e) => setEditData({ ...editData, password: e.target.value })}
+            onChange={(e) =>
+              setEditData({ ...editData, password: e.target.value })
+            }
           />
           <div className="modal-actions">
             <Button type="button" onClick={handleCancelEdit} className="cancel-button">
