@@ -10,7 +10,7 @@ import Modal from "../components/ui/Modal";
 import "../styles/customersPage.css";
 import { getCustomers, addCustomer, updateCustomer } from "../api/customersApi";
 
-// Define la interfaz para Customer
+// Define the interface for Customer
 export interface Customer {
   id: number;
   name: string;
@@ -31,14 +31,14 @@ const CustomersPage: React.FC = () => {
   const [isAddModalOpen, setIsAddModalOpen] = useState<boolean>(false);
   const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
 
-  // Obtener clientes del backend al montar el componente
+  // Fetch customers from the backend when the component mounts
   useEffect(() => {
     const fetchCustomersData = async () => {
       try {
         const data = await getCustomers();
         setCustomers(data);
       } catch (err: any) {
-        setError("Error al cargar los clientes.");
+        setError("Error loading customers.");
       } finally {
         setLoading(false);
       }
@@ -46,22 +46,22 @@ const CustomersPage: React.FC = () => {
     fetchCustomersData();
   }, []);
 
-  // Manejador de inputs para el formulario de agregar cliente
+  // Handler for inputs in the add customer form
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>): void => {
     setNewCustomer({ ...newCustomer, [e.target.name]: e.target.value });
   };
 
-  // Función para agregar un nuevo cliente
+  // Function to add a new customer
   const handleAddCustomer = async (e: FormEvent): Promise<void> => {
     e.preventDefault();
     if (!newCustomer.name || !newCustomer.email || !newCustomer.phone) {
-      setError("Por favor, rellene todos los campos.");
+      setError("Please fill in all fields.");
       return;
     }
-    // Verificar duplicado por email
+    // Check for duplicate by email
     const duplicate = customers.find((c) => c.email === newCustomer.email);
     if (duplicate) {
-      setError("Ya existe un cliente con este correo electrónico.");
+      setError("A customer with this email already exists.");
       return;
     }
     try {
@@ -71,17 +71,17 @@ const CustomersPage: React.FC = () => {
       setError("");
       setIsAddModalOpen(false);
     } catch (err: any) {
-      setError("Error al agregar cliente.");
+      setError("Error adding customer.");
     }
   };
 
-  // Abrir modal para editar cliente
+  // Open modal to edit customer
   const openEditModal = (customer: Customer): void => {
     setSelectedCustomer(customer);
     setIsEditModalOpen(true);
   };
 
-  // Función para actualizar cliente
+  // Function to update customer
   const handleUpdateCustomer = async (updatedCustomer: Customer): Promise<void> => {
     try {
       const updatedData = await updateCustomer(updatedCustomer.id, updatedCustomer);
@@ -91,7 +91,7 @@ const CustomersPage: React.FC = () => {
       setIsEditModalOpen(false);
       setSelectedCustomer(null);
     } catch (err: any) {
-      setError("Error al actualizar cliente.");
+      setError("Error updating customer.");
     }
   };
 
@@ -99,14 +99,14 @@ const CustomersPage: React.FC = () => {
     <div className="customers-container p-6 bg-gray-800 min-h-screen text-white">
       <div className="customers-card max-w-5xl mx-auto">
         <h1 className="customers-header text-3xl font-bold mb-4">
-          Administración de Clientes
+          Customer Management
         </h1>
         {error && <Alert message={error} type="error" />}
         {loading ? (
           <Loader />
         ) : (
           <>
-            {/* Grid de tarjetas para cada cliente */}
+            {/* Grid of cards for each customer */}
             <div className="customers-list">
               {customers.map((customer) => (
                 <div key={customer.id} className="sortable-customer-card">
@@ -114,7 +114,7 @@ const CustomersPage: React.FC = () => {
                   <p className="text-sm">{customer.email}</p>
                   <p className="text-sm">{customer.phone}</p>
                   <Button onClick={() => openEditModal(customer)} className="mt-2">
-                    Editar
+                    Edit
                   </Button>
                 </div>
               ))}
@@ -123,56 +123,56 @@ const CustomersPage: React.FC = () => {
         )}
       </div>
 
-      {/* Botón para abrir modal de agregar nuevo cliente */}
+      {/* Button to open add new customer modal */}
       <div className="mt-8 flex justify-center">
-        <Button onClick={() => setIsAddModalOpen(true)}>Agregar Nuevo Cliente</Button>
+        <Button onClick={() => setIsAddModalOpen(true)}>Add New Customer</Button>
       </div>
 
-      {/* Modal para agregar un nuevo cliente */}
+      {/* Modal for adding a new customer */}
       {isAddModalOpen && (
         <Modal
           isOpen={isAddModalOpen}
           onClose={() => setIsAddModalOpen(false)}
-          title="Agregar Nuevo Cliente"
+          title="Add New Customer"
         >
           <form onSubmit={handleAddCustomer} className="modal-form space-y-4 p-4">
             <Input
-              label="Nombre"
+              label="Name"
               name="name"
               value={newCustomer.name}
               onChange={handleInputChange}
-              placeholder="Ingrese el nombre"
+              placeholder="Enter name"
             />
             <Input
-              label="Correo Electrónico"
+              label="Email"
               name="email"
               value={newCustomer.email}
               onChange={handleInputChange}
-              placeholder="Ingrese el correo electrónico"
+              placeholder="Enter email address"
             />
             <Input
-              label="Teléfono"
+              label="Phone"
               name="phone"
               value={newCustomer.phone}
               onChange={handleInputChange}
-              placeholder="Ingrese el teléfono"
+              placeholder="Enter phone number"
             />
             <div className="flex justify-end gap-4">
               <Button type="button" onClick={() => setIsAddModalOpen(false)}>
-                Cancelar
+                Cancel
               </Button>
-              <Button type="submit">Agregar</Button>
+              <Button type="submit">Add</Button>
             </div>
           </form>
         </Modal>
       )}
 
-      {/* Modal para editar cliente */}
+      {/* Modal for editing customer */}
       {isEditModalOpen && selectedCustomer && (
         <Modal
           isOpen={isEditModalOpen}
           onClose={() => setIsEditModalOpen(false)}
-          title="Editar Cliente"
+          title="Edit Customer"
         >
           <CustomerEditForm
             customer={selectedCustomer}
@@ -209,30 +209,30 @@ const CustomerEditForm: React.FC<CustomerEditFormProps> = ({
 
   return (
     <form onSubmit={handleSubmit} className="modal-form space-y-4 p-4">
-      <h2 className="text-xl font-bold text-gray-800">Editar Cliente</h2>
+      <h2 className="text-xl font-bold text-gray-800">Edit Customer</h2>
       <Input
-        label="Nombre"
+        label="Name"
         name="name"
         value={formData.name}
         onChange={handleChange}
       />
       <Input
-        label="Correo Electrónico"
+        label="Email"
         name="email"
         value={formData.email}
         onChange={handleChange}
       />
       <Input
-        label="Teléfono"
+        label="Phone"
         name="phone"
         value={formData.phone}
         onChange={handleChange}
       />
       <div className="flex justify-end gap-4">
         <Button type="button" onClick={onCancel}>
-          Cancelar
+          Cancel
         </Button>
-        <Button type="submit">Guardar</Button>
+        <Button type="submit">Save</Button>
       </div>
     </form>
   );

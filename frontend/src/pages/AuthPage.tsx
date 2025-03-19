@@ -43,30 +43,30 @@ const AuthPage: React.FC = () => {
       // Login process using AuthContext's login method
       const result = await login({ email: trimmedEmail, password });
       if (result) {
-        setSuccess("Inicio de sesión exitoso. Redirigiendo...");
+        setSuccess("Login successful. Redirecting...");
         setTimeout(() => {
           navigate("/dashboard");
         }, 1000);
       } else {
-        setError("Error al iniciar sesión. Verifica tus credenciales.");
+        setError("Error logging in. Please check your credentials.");
       }
     } else {
       // Registration process
       if (!trimmedName) {
-        setError("El nombre es obligatorio para registrarse.");
+        setError("Name is required for registration.");
         setLoading(false);
         return;
       }
       const result = await registerUser({ name: trimmedName, email: trimmedEmail, password });
       if (result && result.message === "Usuario registrado correctamente") {
-        setSuccess("Registro exitoso. Ahora inicia sesión.");
+        setSuccess("Registration successful. Please sign in now.");
         setIsLogin(true);
         // Clear registration fields
         setName("");
         setEmail("");
         setPassword("");
       } else {
-        setError("Error al registrarse. Intenta nuevamente.");
+        setError("Error during registration. Please try again.");
       }
     }
     setLoading(false);

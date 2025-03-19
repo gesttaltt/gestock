@@ -1,4 +1,4 @@
-/* layout.css */
+/* nav-layout.css */
 
 /* Importar la fuente Roboto desde Google Fonts */
 @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
@@ -76,6 +76,8 @@ body {
 /* Navigation list */
 .layout-nav-list {
   list-style: none;
+  text-align: center;
+  justify-items: center;
 }
 
 /* Navigation list item */
@@ -92,7 +94,11 @@ body {
   color: var(--text-light);
   margin-bottom: 2.5rem;
   margin-top: 2.5rem;
+  margin-left: 0;
+  margin-right: 0;
   transition: background-color 0.3s ease, transform 0.3s ease;
+  /* Add border for reserved space */
+  border: 2px solid transparent;
 }
 
 .layout-dashboard-link img {
@@ -117,30 +123,13 @@ body {
   transition: background-color 0.3s ease, outline 0.3s ease, transform 0.3s ease;
   cursor: pointer;
   margin: 1rem auto;
+  /* Reserve border space */
+  border: 2px solid transparent;
 }
 
 .layout-nav-button:hover {
   background-color: var(--hover-dark);
   transform: scale(1.05);
-  outline: #ffff;
-}
-
-/* Focus effect for accessibility */
-.layout-nav-button:focus {
-  box-shadow: 0 0 0 2px var(--accent-blue);
-}
-
-/* Sub-navigation list */
-.layout-sub-nav-list {
-  text-align: center;
-  align-items: center;
-  margin-top: 1rem;
-  list-style: none;
-  padding: 0;
-}
-
-.layout-sub-nav-item {
-  margin-top: 0.5rem;
 }
 
 /* Navigation link styling */
@@ -155,6 +144,8 @@ body {
   color: var(--text-light);
   transition: background-color 0.3s ease, transform 0.3s ease;
   text-align: center;
+  /* Reserve border space */
+  border: 2px solid transparent;
 }
 
 .layout-nav-link:hover {
@@ -162,6 +153,30 @@ body {
   transform: scale(1.05);
   cursor: pointer;
   color: var(--accent-blue);
+}
+
+/* Focus and active state: display a rounded outline border and avoid margin shifts */
+.layout-nav-link:focus,
+.layout-nav-button:focus,
+.layout-nav-link.active,
+.layout-nav-button.active {
+  outline-offset: 0; /* Remove any default offset */
+  outline: none;
+  border-color: var(--accent-blue);
+  border-radius: 9999px;
+}
+
+/* Sub-navigation list */
+.layout-sub-nav-list {
+  text-align: center;
+  align-items: center;
+  margin-top: 0.8rem;
+  list-style: none;
+  padding: 0;
+}
+
+.layout-sub-nav-item {
+  margin-top: 0.5rem;
 }
 
 /* Layout Main Content */
@@ -203,7 +218,7 @@ button {
 
   /* Ajusta el body para compensar el navbar fijo */
   body {
-    padding-top: 8em; /* Ajusta este valor según la altura real del navbar */
+    padding-top: 8em;
   }
 
   .layout-nav {
@@ -216,10 +231,11 @@ button {
     border-radius: 0;
     padding: 0.5rem;
     display: flex;
-    flex-wrap: wrap;  /* Allow items to wrap onto new lines if needed */
+    flex-wrap: wrap;
     justify-content: center;
     align-items: center;
     z-index: 1000;
+    box-shadow: 0px 7px 16px #000000;
   }
 
   .layout-nav-heading {
@@ -231,13 +247,11 @@ button {
     font-size: 1.2rem;
   }
 
-
   .layout-nav-list {
     display: grid !important; /* Override the existing 'flex' display */
     grid-template-columns: repeat(4, 1fr);
     align-items: center;
     justify-items: center;
-    gap: 0.5rem;
     list-style: none;
     padding: 0;
     margin: 0;
@@ -258,7 +272,7 @@ button {
     padding: 0.5rem;
   }
 
-   /* 3) For the other 3 nav items, add placeholder icons above the text via pseudo-elements */
+  /* 3) For the other 3 nav items, add placeholder icons above the text via pseudo-elements */
 
   /* -- Inventory (2nd item) -- */
   .layout-nav-item:nth-child(2) .layout-nav-button {
@@ -269,7 +283,6 @@ button {
     display: block;
     width: 30px;
     height: 30px;
-    /* Replace with your own placeholder icon path */
     background: url("../assets/icons/stock.svg") no-repeat center / contain;
     margin-bottom: 0.4rem;
   }
@@ -283,7 +296,6 @@ button {
     display: block;
     width: 30px;
     height: 30px;
-    /* Replace with your own placeholder icon path */
     background: url("../assets/icons/customers.svg") no-repeat center / contain;
     margin-bottom: 0.4rem;
   }
@@ -297,7 +309,6 @@ button {
     display: block;
     width: 30px;
     height: 30px;
-    /* Replace with your own placeholder icon path */
     background: url("../assets/icons/profile.svg") no-repeat center / contain;
     margin-bottom: 0.4rem;
   }
@@ -310,5 +321,3 @@ button {
     margin: 0; /* Remove extra margin so they fit nicely in the grid */
   }
 }
-
-

@@ -45,7 +45,7 @@ const Categories: React.FC = () => {
         const data = await fetchCategories();
         setCategories(data);
       } catch (error) {
-        setError("Error al cargar las categorías");
+        setError("Error loading categories");
       } finally {
         setLoading(false);
       }
@@ -59,7 +59,7 @@ const Categories: React.FC = () => {
     setError(null);
 
     if (!newCategory.name.trim()) {
-      setError("El nombre de la categoría es obligatorio");
+      setError("Category name is required");
       return;
     }
 
@@ -70,11 +70,11 @@ const Categories: React.FC = () => {
         setNewCategory({ name: "", description: "" });
         setIsModalOpen(false);
       } else {
-        setError("Error al crear la categoría");
+        setError("Error creating category");
       }
     } catch (error) {
-      console.error("Error al crear la categoría:", error);
-      setError("Error al crear la categoría");
+      console.error("Error creating category:", error);
+      setError("Error creating category");
     }
   };
 
@@ -91,7 +91,7 @@ const Categories: React.FC = () => {
     setError(null);
 
     if (!editingCategory || !editingCategory.name.trim()) {
-      setError("El nombre de la categoría es obligatorio");
+      setError("Category name is required");
       return;
     }
 
@@ -104,27 +104,27 @@ const Categories: React.FC = () => {
         setEditingCategory(null);
         setIsEditModalOpen(false);
       } else {
-        setError("Error al actualizar la categoría");
+        setError("Error updating category");
       }
     } catch (error) {
-      console.error("Error al actualizar la categoría:", error);
-      setError("Error al actualizar la categoría");
+      console.error("Error updating category:", error);
+      setError("Error updating category");
     }
   };
 
   // Handler for deleting a category
   const handleDelete = async (id: string): Promise<void> => {
-    if (!window.confirm("¿Está seguro de eliminar esta categoría?")) return;
+    if (!window.confirm("Are you sure you want to delete this category?")) return;
     try {
       const result = await deleteCategory(id);
       if (result) {
         setCategories(categories.filter((cat) => cat._id !== id));
       } else {
-        setError("Error al eliminar la categoría");
+        setError("Error deleting category");
       }
     } catch (error) {
-      console.error("Error al eliminar la categoría:", error);
-      setError("Error al eliminar la categoría");
+      console.error("Error deleting category:", error);
+      setError("Error deleting category");
     }
   };
 
@@ -132,7 +132,7 @@ const Categories: React.FC = () => {
     <div className="p-6 bg-gray-900 text-white min-h-screen">
       <CategoriesHeader />
       <Button onClick={() => setIsModalOpen(true)} className="mt-4">
-        Agregar Categoría
+        Add Category
       </Button>
 
       {loading && <Loader />}
@@ -146,13 +146,13 @@ const Categories: React.FC = () => {
             description={category.description}
           >
             <div className="flex justify-end mt-2">
-              <Button onClick={() => handleEditClick(category)}>Editar</Button>
+              <Button onClick={() => handleEditClick(category)}>Edit</Button>
               <Button
                 onClick={() => handleDelete(category._id)}
                 className="ml-2"
                 type="button"
               >
-                Eliminar
+                Delete
               </Button>
             </div>
           </Card>
@@ -163,12 +163,12 @@ const Categories: React.FC = () => {
       <Modal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        title="Agregar Nueva Categoría"
+        title="Add New Category"
       >
         <Form onSubmit={handleSubmit}>
           <Input
             type="text"
-            placeholder="Nombre de la categoría"
+            placeholder="Category name"
             value={newCategory.name}
             onChange={(e: ChangeEvent<HTMLInputElement>) =>
               setNewCategory({ ...newCategory, name: e.target.value })
@@ -177,7 +177,7 @@ const Categories: React.FC = () => {
           />
           <Input
             type="text"
-            placeholder="Descripción"
+            placeholder="Description"
             value={newCategory.description}
             onChange={(e: ChangeEvent<HTMLInputElement>) =>
               setNewCategory({ ...newCategory, description: e.target.value })
@@ -185,7 +185,7 @@ const Categories: React.FC = () => {
             name="categoryDescription"
           />
           <Button type="submit" className="w-full">
-            Guardar
+            Save
           </Button>
         </Form>
       </Modal>
@@ -194,12 +194,12 @@ const Categories: React.FC = () => {
       <Modal
         isOpen={isEditModalOpen}
         onClose={() => setIsEditModalOpen(false)}
-        title="Editar Categoría"
+        title="Edit Category"
       >
         <Form onSubmit={handleEditSubmit}>
           <Input
             type="text"
-            placeholder="Nombre de la categoría"
+            placeholder="Category name"
             value={editingCategory?.name || ""}
             onChange={(e: ChangeEvent<HTMLInputElement>) =>
               setEditingCategory({
@@ -211,7 +211,7 @@ const Categories: React.FC = () => {
           />
           <Input
             type="text"
-            placeholder="Descripción"
+            placeholder="Description"
             value={editingCategory?.description || ""}
             onChange={(e: ChangeEvent<HTMLInputElement>) =>
               setEditingCategory({
@@ -222,7 +222,7 @@ const Categories: React.FC = () => {
             name="editCategoryDescription"
           />
           <Button type="submit" className="w-full">
-            Actualizar
+            Update
           </Button>
         </Form>
       </Modal>

@@ -1,7 +1,7 @@
 /*
  Profile.tsx
 */
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import ProfileHeader from "./ProfileHeader";
 import { getProfile, updateProfile } from "../api/authApi";
 import Loader from "../components/ui/Loader";
@@ -39,9 +39,6 @@ const Profile: React.FC = () => {
   const [submitting, setSubmitting] = useState<boolean>(false);
   const [successMessage, setSuccessMessage] = useState<string>("");
 
-  // Ref for auto-focusing the name input when modal opens
-  const nameInputRef = useRef<HTMLInputElement>(null);
-
   useEffect(() => {
     const loadProfile = async () => {
       try {
@@ -54,10 +51,10 @@ const Profile: React.FC = () => {
             password: "",
           });
         } else {
-          throw new Error("No se pudo cargar el perfil");
+          throw new Error("Could not load profile");
         }
       } catch (err: any) {
-        setError("Error al cargar el perfil");
+        setError("Error loading profile");
       } finally {
         setLoading(false);
       }
@@ -65,20 +62,13 @@ const Profile: React.FC = () => {
     loadProfile();
   }, []);
 
-  // Auto-focus the name input when modal opens
-  useEffect(() => {
-    if (isEditModalOpen && nameInputRef.current) {
-      nameInputRef.current.focus();
-    }
-  }, [isEditModalOpen]);
-
   const handleEditSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
     setError(null);
     setSuccessMessage("");
 
     if (!editData.name.trim() || !editData.email.trim()) {
-      setError("El nombre y el email son obligatorios");
+      setError("Name and email are required");
       return;
     }
 
@@ -95,7 +85,7 @@ const Profile: React.FC = () => {
       const updatedProfile = await updateProfile(updatedFields);
       if (updatedProfile) {
         setProfile(updatedProfile);
-        setSuccessMessage("Perfil actualizado exitosamente");
+        setSuccessMessage("Profile updated successfully");
         // Reset editData to reflect the updated profile
         setEditData({
           name: updatedProfile.name || "",
@@ -108,11 +98,11 @@ const Profile: React.FC = () => {
           setSuccessMessage("");
         }, 1500);
       } else {
-        setError("Error al actualizar el perfil");
+        setError("Error updating profile");
       }
     } catch (err: any) {
-      console.error("Error al actualizar perfil:", err);
-      setError("Error al actualizar el perfil");
+      console.error("Error updating profile:", err);
+      setError("Error updating profile");
     } finally {
       setSubmitting(false);
     }
@@ -140,33 +130,33 @@ const Profile: React.FC = () => {
       {successMessage && <Alert message={successMessage} type="success" />}
       <div className="profile-info">
         <p>
-          <strong>Nombre:</strong> {profile?.name}
+          <strong>Name:</strong> {profile?.name}
         </p>
         <p>
           <strong>Email:</strong> {profile?.email}
         </p>
         <p>
-          <strong>Rol:</strong> {profile?.role}
+          <strong>Role:</strong> {profile?.role}
         </p>
       </div>
       <Button onClick={() => setIsEditModalOpen(true)} className="edit-button">
-        Editar Perfil
+        Edit Profile
       </Button>
 
       {/* Modal for Editing Profile */}
       <Modal
         isOpen={isEditModalOpen}
         onClose={handleCancelEdit}
-        title="Editar Perfil"
+        title="Edit Profile"
       >
         <Form onSubmit={handleEditSubmit}>
           <Input
             type="text"
             name="name"
-            placeholder="Nombre"
+            placeholder="Name"
             value={editData.name}
             onChange={(e) => setEditData({ ...editData, name: e.target.value })}
-            ref={nameInputRef}
+            autoFocus
           />
           <Input
             type="email"
@@ -178,17 +168,16 @@ const Profile: React.FC = () => {
           <Input
             type="password"
             name="password"
-            placeholder="Nueva contraseña (opcional)"
+            placeholder="New password (optional)"
             value={editData.password || ""}
             onChange={(e) => setEditData({ ...editData, password: e.target.value })}
-            title="Dejar en blanco si no deseas cambiar la contraseña"
           />
           <div className="modal-actions">
             <Button type="button" onClick={handleCancelEdit} className="cancel-button">
-              Cancelar
+              Cancel
             </Button>
             <Button type="submit" className="w-full mt-4" disabled={submitting}>
-              {submitting ? "Guardando..." : "Guardar Cambios"}
+              {submitting ? "Saving..." : "Save Changes"}
             </Button>
           </div>
         </Form>

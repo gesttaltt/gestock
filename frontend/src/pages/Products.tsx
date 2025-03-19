@@ -59,7 +59,7 @@ const Products: React.FC = () => {
         const categoriesData = await fetchCategories();
         setCategories(categoriesData);
       } catch (err) {
-        setError("Error al cargar los datos");
+        setError("Error loading data");
       } finally {
         setLoading(false);
       }
@@ -72,18 +72,18 @@ const Products: React.FC = () => {
   ): Promise<void> => {
     e.preventDefault();
     setError(null);
-    //Simple validation
+    // Simple validation
     if (
       !newProduct.name ||
       !newProduct.category ||
       !newProduct.price ||
       !newProduct.stock
     ) {
-      setError("Todos los campos son obligatorios");
+      setError("All fields are required");
       return;
     }
     try {
-      // Stock and Price number conversion
+      // Convert price and stock to numbers
       const productToCreate = {
         ...newProduct,
         price: Number(newProduct.price),
@@ -95,11 +95,11 @@ const Products: React.FC = () => {
         setNewProduct({ name: "", category: "", price: "", stock: "" });
         setIsCreateModalOpen(false);
       } else {
-        setError("Error al crear el producto");
+        setError("Error creating product");
       }
     } catch (error) {
-      console.error("Error al crear producto:", error);
-      setError("Error al crear el producto");
+      console.error("Error creating product:", error);
+      setError("Error creating product");
     }
   };
 
@@ -120,11 +120,11 @@ const Products: React.FC = () => {
       editProduct.price === undefined ||
       editProduct.stock === undefined
     ) {
-      setError("Todos los campos son obligatorios");
+      setError("All fields are required");
       return;
     }
     try {
-      // Asegurarse de que price y stock sean números
+      // Ensure price and stock are numbers
       const productToUpdate = {
         ...editProduct,
         price: Number(editProduct.price),
@@ -138,17 +138,17 @@ const Products: React.FC = () => {
         setIsEditModalOpen(false);
         setEditProduct(null);
       } else {
-        setError("Error al actualizar el producto");
+        setError("Error updating product");
       }
     } catch (error) {
-      console.error("Error al actualizar producto:", error);
-      setError("Error al actualizar el producto");
+      console.error("Error updating product:", error);
+      setError("Error updating product");
     }
   };
 
   const handleDelete = async (id: string): Promise<void> => {
     const confirmDelete = window.confirm(
-      "¿Estás seguro de eliminar este producto?"
+      "Are you sure you want to delete this product?"
     );
     if (!confirmDelete) return;
     try {
@@ -156,11 +156,11 @@ const Products: React.FC = () => {
       if (deleted) {
         setProducts(products.filter((p) => p._id !== id));
       } else {
-        setError("Error al eliminar el producto");
+        setError("Error deleting product");
       }
     } catch (error) {
-      console.error("Error al eliminar producto:", error);
-      setError("Error al eliminar el producto");
+      console.error("Error deleting product:", error);
+      setError("Error deleting product");
     }
   };
 
@@ -171,7 +171,7 @@ const Products: React.FC = () => {
       <ProductsHeader />
       <div className="flex justify-between items-center mt-4">
         <Button onClick={() => setIsCreateModalOpen(true)}>
-          Agregar Producto
+          Add Product
         </Button>
       </div>
       {error && <Alert message={error} type="error" />}
@@ -180,27 +180,27 @@ const Products: React.FC = () => {
           <Card
             key={product._id}
             title={product.name}
-            description={`Precio: $${product.price} | Stock: ${product.stock}`}
+            description={`Price: $${product.price} | Stock: ${product.stock}`}
           >
             <div className="flex justify-between mt-2">
-              <Button onClick={() => handleEditClick(product)}>Editar</Button>
+              <Button onClick={() => handleEditClick(product)}>Edit</Button>
               <Button onClick={() => handleDelete(product._id)}>
-                Eliminar
+                Delete
               </Button>
             </div>
           </Card>
         ))}
       </div>
-      {/* Modal para crear producto */}
+      {/* Modal for creating a product */}
       <Modal
         isOpen={isCreateModalOpen}
         onClose={() => setIsCreateModalOpen(false)}
-        title="Agregar Nuevo Producto"
+        title="Add New Product"
       >
         <Form onSubmit={handleCreateSubmit}>
           <Input
             type="text"
-            placeholder="Nombre del producto"
+            placeholder="Product name"
             value={newProduct.name}
             onChange={(e: ChangeEvent<HTMLInputElement>) =>
               setNewProduct({ ...newProduct, name: e.target.value })
@@ -215,7 +215,7 @@ const Products: React.FC = () => {
             className="p-2 m-2 bg-gray-800 text-white rounded"
           >
             <option value="" className="p-2 m-2 gap-4">
-              Seleccione una categoría
+              Select a category
             </option>
             {categories.map((cat) => (
               <option key={cat._id} value={cat._id}>
@@ -225,7 +225,7 @@ const Products: React.FC = () => {
           </select>
           <Input
             type="number"
-            placeholder="Precio"
+            placeholder="Price"
             value={newProduct.price}
             onChange={(e: ChangeEvent<HTMLInputElement>) =>
               setNewProduct({ ...newProduct, price: e.target.value })
@@ -242,11 +242,11 @@ const Products: React.FC = () => {
             name="productStock"
           />
           <Button type="submit" className="w-full">
-            Guardar
+            Save
           </Button>
         </Form>
       </Modal>
-      {/* Modal para editar producto */}
+      {/* Modal for editing a product */}
       {isEditModalOpen && editProduct && (
         <Modal
           isOpen={isEditModalOpen}
@@ -254,12 +254,12 @@ const Products: React.FC = () => {
             setIsEditModalOpen(false);
             setEditProduct(null);
           }}
-          title="Editar Producto"
+          title="Edit Product"
         >
           <Form onSubmit={handleEditSubmit}>
             <Input
               type="text"
-              placeholder="Nombre del producto"
+              placeholder="Product name"
               value={editProduct.name}
               onChange={(e: ChangeEvent<HTMLInputElement>) =>
                 setEditProduct({ ...editProduct, name: e.target.value })
@@ -273,7 +273,7 @@ const Products: React.FC = () => {
               }
               className="p-2 bg-gray-800 text-white rounded"
             >
-              <option value="">Seleccione una categoría</option>
+              <option value="">Select a category</option>
               {categories.map((cat) => (
                 <option key={cat._id} value={cat._id}>
                   {cat.name}
@@ -282,7 +282,7 @@ const Products: React.FC = () => {
             </select>
             <Input
               type="number"
-              placeholder="Precio"
+              placeholder="Price"
               value={String(editProduct.price)}
               onChange={(e: ChangeEvent<HTMLInputElement>) =>
                 setEditProduct({ ...editProduct, price: Number(e.target.value) })
@@ -299,7 +299,7 @@ const Products: React.FC = () => {
               name="editProductStock"
             />
             <Button type="submit" className="w-full mt-4">
-              Guardar Cambios
+              Save Changes
             </Button>
           </Form>
         </Modal>
