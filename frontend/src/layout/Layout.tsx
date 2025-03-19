@@ -20,7 +20,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         <h1 className="layout-nav-heading">Gestock</h1>
         <ul className="layout-nav-list">
           <li className="layout-nav-item">
-            <Link to="/" className="layout-dashboard-link">
+            <Link to="/dashboard" className="layout-dashboard-link">
               <img
                 src="/gestock-favicon.svg"
                 alt="Gestock Logo"
