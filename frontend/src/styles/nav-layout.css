@@ -166,6 +166,14 @@ body {
   border-radius: 9999px;
 }
 
+.layout-dashboard-link:focus,
+.layout-dashboard-link.active {
+  outline-offset: 0;
+  outline: none;
+  border-color: var(--accent-blue);
+  border-radius: 9999px;
+}
+
 /* Sub-navigation list */
 .layout-sub-nav-list {
   text-align: center;
